@@ -1,6 +1,7 @@
 import REDataApi.REDataController;
 import REDataApi.REDataFeeder;
 import REDataApi.REFeeder;
+import REDataApi.REData;
 import WeatherApi.OWMFeeder;
 import WeatherApi.WeatherController;
 import WeatherApi.WeatherData;
@@ -15,5 +16,15 @@ public class main {
         System.out.println("clima:");
         System.out.println("temp:" + weatherData.getTemperature());
         System.out.println("humidity:" + weatherData.getHumidity());
+
+
+        REFeeder reFeeder = new REDataFeeder();
+        REDataController reDataController = new REDataController(reFeeder);
+
+        REData reData = reDataController.getEnergyData();
+        if(reData != null) {
+            System.out.println("Indicador :" + reData.getIndicator());
+            System.out.println("Time: " + reData.getTimestamp());
+        }
     }
 }
