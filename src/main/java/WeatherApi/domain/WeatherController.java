@@ -1,4 +1,4 @@
-package WeatherApi;
+package WeatherApi.domain;
 
 public class WeatherController{
     private final WeatherFeeder feeder;

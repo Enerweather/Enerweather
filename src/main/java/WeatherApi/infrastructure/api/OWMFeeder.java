@@ -1,5 +1,7 @@
-package WeatherApi;
+package WeatherApi.infrastructure.api;
 
+import WeatherApi.domain.WeatherData;
+import WeatherApi.domain.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -8,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class OWMFeeder implements WeatherFeeder{
+public class OWMFeeder implements WeatherFeeder {
     private String apiKey;
     private String baseUrl = "https://api.openweathermap.org/data/2.5/";
 

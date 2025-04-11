@@ -1,11 +1,11 @@
-import REDataApi.REDataController;
-import REDataApi.REDataFeeder;
-import REDataApi.REFeeder;
-import REDataApi.REData;
-import WeatherApi.OWMFeeder;
-import WeatherApi.WeatherController;
-import WeatherApi.WeatherData;
-import WeatherApi.WeatherFeeder;
+import REDataApi.domain.REDataController;
+import REDataApi.infrastructure.api.REDataFeeder;
+import REDataApi.domain.REFeeder;
+import REDataApi.domain.REData;
+import WeatherApi.infrastructure.api.OWMFeeder;
+import WeatherApi.domain.WeatherController;
+import WeatherApi.domain.WeatherData;
+import WeatherApi.domain.WeatherFeeder;
 
 public class main {
     public static void main(String[] args) {

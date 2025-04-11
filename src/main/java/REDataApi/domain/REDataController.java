@@ -1,7 +1,7 @@
-package REDataApi;
+package REDataApi.domain;
 
 public class REDataController {
-    private final  REFeeder  feeder;
+    private final REFeeder feeder;
     public REDataController(REFeeder feeder) {
         this.feeder = feeder;
     }

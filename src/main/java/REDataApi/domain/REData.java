@@ -1,4 +1,4 @@
-package REDataApi;
+package REDataApi.domain;
 
 public class REData {
     private String indicator;

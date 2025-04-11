@@ -1,4 +1,4 @@
-package WeatherApi;
+package WeatherApi.domain;
 
 public class WeatherData {
     private double temperature;

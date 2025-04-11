@@ -1,5 +1,7 @@
-package REDataApi;
+package REDataApi.infrastructure.api;
 
+import REDataApi.domain.REData;
+import REDataApi.domain.REFeeder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
