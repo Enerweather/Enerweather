@@ -6,17 +6,17 @@ import WeatherApi.infrastructure.api.OWMFeeder;
 import WeatherApi.domain.WeatherController;
 import WeatherApi.domain.WeatherData;
 import WeatherApi.domain.WeatherFeeder;
+import WeatherApi.infrastructure.persistence.DBInitializer;
+import WeatherApi.infrastructure.persistence.WeatherRepository;
 
 public class main {
     public static void main(String[] args) {
-        WeatherFeeder weatherFeeder = new OWMFeeder("0b7105bf1dbbc10240a3fe41a53f2123");
-        WeatherController weatherController = new WeatherController(weatherFeeder);
+        String apiKey  = "0b7105bf1dbbc10240a3fe41a53f2123";
+        DBInitializer.createWeatherTable();
 
-        WeatherData weatherData = weatherController.getWeatherData("Las Palmas");
-        System.out.println("clima:");
-        System.out.println("temp:" + weatherData.getTemperature());
-        System.out.println("humidity:" + weatherData.getHumidity());
-
+        OWMFeeder feeder = new OWMFeeder(apiKey);
+        WeatherController weatherController = new WeatherController(feeder);
+        WeatherRepository weatherRepository = new WeatherRepository();
 
         REFeeder reFeeder = new REDataFeeder();
         REDataController reDataController = new REDataController(reFeeder);
