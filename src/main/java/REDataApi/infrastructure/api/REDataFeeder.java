@@ -14,21 +14,19 @@ import java.time.format.DateTimeFormatter;
 
 public class REDataFeeder implements REFeeder {
     private final String baseUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
-    private final String geoId = "8741";
-    private final String geoName = "Peninsula";
-
 
     @Override
     public REData fetchEnergyData() {
         try{
             LocalDateTime now = LocalDateTime.now();
+            LocalDateTime oneDayAgoPlusOneHour = now.minusDays(1).plusHours(1);
             LocalDateTime oneDayAgo = now.minusDays(1);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
             String startFormatted = oneDayAgo.format(formatter);
-            String endFormatted = now.format(formatter);
+            String endFormatted = oneDayAgoPlusOneHour.format(formatter);
 
-            String urlString = baseUrl + "?start_date=" + startFormatted + "&end_date=" + endFormatted + "&time_trunc=hour&geo_trunc=electric_system&geo_limit=1&geo_ids=" + geoId;
+            String urlString = baseUrl + "?start_date=" + startFormatted + "&end_date=" + endFormatted + "&time_trunc=day";
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -51,8 +49,6 @@ public class REDataFeeder implements REFeeder {
             data.setUnit(unit);
             data.setValue(value);
             data.setTimestamp(timestamp);
-            data.setGeoId(Integer.parseInt(geoId));
-            data.setGeoName(geoName);
             return data;
 
 
