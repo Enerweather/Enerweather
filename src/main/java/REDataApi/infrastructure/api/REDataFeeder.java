@@ -3,58 +3,104 @@ package REDataApi.infrastructure.api;
 import REDataApi.domain.REData;
 import REDataApi.domain.REFeeder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class REDataFeeder implements REFeeder {
-    private final String baseUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
+    private final String baseUrl;
+    private final HttpClient httpClient;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+    public REDataFeeder(String baseUrl) {
+        this(baseUrl, HttpClient.newHttpClient());
+    }
+
+    public REDataFeeder(String baseUrl, HttpClient httpClient) {
+        this.baseUrl = baseUrl;
+        this.httpClient = httpClient;
+    }
 
     @Override
-    public REData fetchEnergyData() {
-        try{
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime oneDayAgoPlusOneHour = now.minusDays(1).plusHours(1);
-            LocalDateTime oneDayAgo = now.minusDays(1);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    public List<REData> fetchEnergyData() throws REDataFetchException {
+        try {
+            LocalDate queryDate = LocalDate.now().minusDays(4);
+            String start = queryDate.atStartOfDay().format(formatter);
+            String end = queryDate.atTime(23, 59, 59).format(formatter);
 
-            String startFormatted = oneDayAgo.format(formatter);
-            String endFormatted = oneDayAgoPlusOneHour.format(formatter);
+            String url = String.format("%s?start_date=%s&end_date=%s&time_trunc=day",
+                    baseUrl,
+                    URLEncoder.encode(start, StandardCharsets.UTF_8),
+                    URLEncoder.encode(end, StandardCharsets.UTF_8)
+            );
 
-            String urlString = baseUrl + "?start_date=" + startFormatted + "&end_date=" + endFormatted + "&time_trunc=day";
-            URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-            JsonObject jsonResponse = JsonParser.parseReader(reader).getAsJsonObject();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new REDataFetchException("Unexpected HTTP status: " + response.statusCode());
+            }
 
-            JsonObject indicator = jsonResponse.getAsJsonArray("included").get(0).getAsJsonObject();
-            String indicatorName = indicator.get("attributes").getAsJsonObject().get("title").getAsString();
-            String unit = indicator.get("attributes").getAsJsonObject().get("unit").getAsString();
-            JsonObject attributes = indicator.getAsJsonObject("attributes");
-            JsonArray values = attributes.getAsJsonArray("values");
+            JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
+            return parseRenovables(root, start);
 
-            JsonObject latestValue = values.get(values.size() - 1).getAsJsonObject();
-            double value = latestValue.get("value").getAsDouble();
-            String timestamp = latestValue.get("timestamp").getAsString();
-
-            REData data = new REData();
-            data.setIndicator(indicatorName);
-            data.setUnit(unit);
-            data.setValue(value);
-            data.setTimestamp(timestamp);
-            return data;
-
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new REDataFetchException("Failed to fetch energy data", e);
         }
+    }
+
+    private List<REData> parseRenovables(JsonObject root, String requestStart) throws REDataFetchException {
+        JsonArray included = root.getAsJsonArray("included");
+        if (included == null) {
+            throw new REDataFetchException("No 'included' array in response");
+        }
+
+        JsonObject renovGroup = null;
+        for (JsonElement e : included) {
+            JsonObject grp = e.getAsJsonObject();
+            if ("Renovable".equals(grp.get("type").getAsString())) {
+                renovGroup = grp;
+                break;
+            }
+        }
+        if (renovGroup == null) {
+            throw new REDataFetchException("No 'Renovable' group found");
+        }
+
+        JsonArray content = renovGroup.getAsJsonObject("attributes").getAsJsonArray("content");
+        List<REData> list = new ArrayList<>();
+
+        for (JsonElement ce : content) {
+            JsonObject item      = ce.getAsJsonObject();
+            JsonObject attrs     = item.getAsJsonObject("attributes");
+            JsonArray  valuesArr = attrs.getAsJsonArray("values");
+            if (valuesArr == null || valuesArr.size() == 0) continue;
+
+            JsonObject v = valuesArr.get(0).getAsJsonObject();
+            REData data = new REData();
+            data.setIndicator(attrs.get("title").getAsString());
+            data.setValue(v.get("value").getAsDouble());
+            data.setPercentage(v.get("percentage").getAsDouble());
+            data.setTimestamp(requestStart);
+            list.add(data);
+        }
+
+        return list;
     }
 }
