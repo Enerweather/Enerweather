@@ -18,6 +18,12 @@ public class main {
         WeatherController weatherController = new WeatherController(feeder);
         WeatherRepository weatherRepository = new WeatherRepository();
 
+        WeatherData weatherData = weatherController.getWeatherData("Madrid");
+        if (weatherData != null) {
+            weatherRepository.save(weatherData);
+            System.out.println("Weather saved");
+        }
+
         REFeeder reFeeder = new REDataFeeder();
         REDataController reDataController = new REDataController(reFeeder);
 
