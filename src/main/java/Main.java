@@ -1,21 +1,32 @@
 import REDataApi.domain.REDataController;
 import REDataApi.domain.REData;
 import REDataApi.infrastructure.api.REDataFetchException;
+import WeatherApi.domain.WeatherController;
+import WeatherApi.domain.WeatherData;
+import WeatherApi.infrastructure.api.OWMFeeder;
 import WeatherApi.infrastructure.persistence.DBInitializer;
+import WeatherApi.infrastructure.persistence.WeatherRepository;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        /*
-        String apiKey = "0b7105bf1dbbc10240a3fe41a53f2123";
+
+        String apiKey = args[0];
         DBInitializer.createWeatherTable();
 
         OWMFeeder feeder = new OWMFeeder(apiKey);
         WeatherController weatherController = new WeatherController(feeder);
         WeatherRepository weatherRepository = new WeatherRepository();
-*/
-        REDataController reDataController = new REDataController();
+        WeatherData weatherData = weatherController.getWeatherData("Madrid");
+
+        if (weatherData != null) {
+            weatherRepository.save(weatherData);
+            System.out.println("Weather saved");
+        }
+
+
+       /* REDataController reDataController = new REDataController();
 
         try {
             List<REData> dataList = reDataController.getEnergyData();
@@ -26,5 +37,7 @@ public class Main {
         } catch (REDataFetchException e) {
             System.err.println("Error fetching data: " + e.getMessage());
         }
+
+        */
     }
 }

@@ -36,7 +36,7 @@ public class REDataFeeder implements REFeeder {
     @Override
     public List<REData> fetchEnergyData() throws REDataFetchException {
         try {
-            LocalDate queryDate = LocalDate.now().minusDays(4);
+            LocalDate queryDate = LocalDate.now().minusDays(1);
             String start = queryDate.atStartOfDay().format(formatter);
             String end = queryDate.atTime(23, 59, 59).format(formatter);
 
@@ -87,10 +87,10 @@ public class REDataFeeder implements REFeeder {
         List<REData> list = new ArrayList<>();
 
         for (JsonElement ce : content) {
-            JsonObject item      = ce.getAsJsonObject();
-            JsonObject attrs     = item.getAsJsonObject("attributes");
+            JsonObject item = ce.getAsJsonObject();
+            JsonObject attrs = item.getAsJsonObject("attributes");
             JsonArray  valuesArr = attrs.getAsJsonArray("values");
-            if (valuesArr == null || valuesArr.size() == 0) continue;
+            if (valuesArr == null || valuesArr.isEmpty()) continue;
 
             JsonObject v = valuesArr.get(0).getAsJsonObject();
             REData data = new REData();
