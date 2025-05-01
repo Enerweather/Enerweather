@@ -10,7 +10,7 @@ import Weather.infrastructure.out.persistence.WeatherRepository;
 public class Main {
     public static void main(String[] args) {
 
-        String apiKey = "Main";
+        String apiKey = args[0];
         DBInitializer.createWeatherTable();
 
         WeatherFeeder feeder = new OWMFeeder(apiKey);
@@ -19,9 +19,7 @@ public class Main {
         GetWeatherUseCase service = new WeatherService(feeder, repo);
 
         String city = "London";
-        System.out.println(city);
         WeatherData data = service.execute(city);
-        System.out.println(data);
         System.out.println(
                 "Weather in " + data.getCityName() + ": " + data.getTemperature());
 
