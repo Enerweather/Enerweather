@@ -1,4 +1,4 @@
-package WeatherApi.infrastructure.persistence;
+package Weather.infrastructure.out.persistence;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -19,7 +19,7 @@ public class DBInitializer {
 
 
         try (Connection conn = DBConnection.connect();
-        Statement stmt = conn.createStatement()){
+             Statement stmt = conn.createStatement()){
             stmt.execute(sql);
         } catch (Exception e) {
             System.out.println("error" + e.getMessage());

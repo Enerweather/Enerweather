@@ -1,6 +1,7 @@
-package REDataApi.domain;
+package RE.application.port.out;
 
-import REDataApi.infrastructure.api.REDataFetchException;
+import RE.domain.model.REData;
+import RE.infrastructure.out.api.REDataFetchException;
 
 import java.util.List;
 

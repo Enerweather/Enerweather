@@ -1,19 +1,21 @@
-package REDataApi.domain;
+package RE.infrastructure.in.rest;
 
-import REDataApi.infrastructure.api.REDataFeeder;
-import REDataApi.infrastructure.api.REDataFetchException;
+import RE.application.port.out.REFeeder;
+import RE.domain.model.REData;
+import RE.infrastructure.out.api.REDataFeeder;
+import RE.infrastructure.out.api.REDataFetchException;
 import java.util.List;
 
 
-public class REDataController {
+public class REController {
     private final REFeeder feeder;
-    public REDataController() {
+    public REController() {
         this.feeder = new REDataFeeder(
                 "https://apidatos.ree.es/en/datos/balance/balance-electrico"
         );
     }
 
-    public REDataController(String baseUrl) {
+    public REController(String baseUrl) {
         this.feeder = new REDataFeeder(baseUrl);
     }
 

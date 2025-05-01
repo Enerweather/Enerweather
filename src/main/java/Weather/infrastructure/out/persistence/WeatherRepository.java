@@ -1,6 +1,6 @@
-package WeatherApi.infrastructure.persistence;
+package Weather.infrastructure.out.persistence;
 
-import WeatherApi.domain.WeatherData;
+import Weather.domain.model.WeatherData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

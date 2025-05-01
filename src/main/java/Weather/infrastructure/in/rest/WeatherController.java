@@ -1,4 +1,7 @@
-package WeatherApi.domain;
+package Weather.infrastructure.in.rest;
+
+import Weather.application.port.out.WeatherFeeder;
+import Weather.domain.model.WeatherData;
 
 public class WeatherController{
     private final WeatherFeeder feeder;

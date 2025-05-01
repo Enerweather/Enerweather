@@ -1,13 +1,8 @@
-import REDataApi.domain.REDataController;
-import REDataApi.domain.REData;
-import REDataApi.infrastructure.api.REDataFetchException;
-import WeatherApi.domain.WeatherController;
-import WeatherApi.domain.WeatherData;
-import WeatherApi.infrastructure.api.OWMFeeder;
-import WeatherApi.infrastructure.persistence.DBInitializer;
-import WeatherApi.infrastructure.persistence.WeatherRepository;
-
-import java.util.List;
+import Weather.infrastructure.in.rest.WeatherController;
+import Weather.domain.model.WeatherData;
+import Weather.infrastructure.out.api.OWMFeeder;
+import Weather.infrastructure.out.persistence.DBInitializer;
+import Weather.infrastructure.out.persistence.WeatherRepository;
 
 public class Main {
     public static void main(String[] args) {

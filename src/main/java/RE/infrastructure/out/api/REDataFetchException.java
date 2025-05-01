@@ -1,4 +1,4 @@
-package REDataApi.infrastructure.api;
+package RE.infrastructure.out.api;
 
 public class REDataFetchException extends Exception {
     public REDataFetchException(String message) {
