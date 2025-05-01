@@ -1,4 +1,7 @@
-import Weather.infrastructure.in.rest.WeatherController;
+import Weather.application.port.in.GetWeatherUseCase;
+import Weather.application.port.out.WeatherFeeder;
+import Weather.application.port.out.WeatherRepositoryPort;
+import Weather.application.service.WeatherService;
 import Weather.domain.model.WeatherData;
 import Weather.infrastructure.out.api.OWMFeeder;
 import Weather.infrastructure.out.persistence.DBInitializer;
@@ -7,19 +10,20 @@ import Weather.infrastructure.out.persistence.WeatherRepository;
 public class Main {
     public static void main(String[] args) {
 
-        String apiKey = args[0];
+        String apiKey = "Main";
         DBInitializer.createWeatherTable();
 
-        OWMFeeder feeder = new OWMFeeder(apiKey);
-        WeatherController weatherController = new WeatherController(feeder);
-        WeatherRepository weatherRepository = new WeatherRepository();
-        WeatherData weatherData = weatherController.getWeatherData("Madrid");
+        WeatherFeeder feeder = new OWMFeeder(apiKey);
+        WeatherRepositoryPort repo = new WeatherRepository();
 
-        if (weatherData != null) {
-            weatherRepository.save(weatherData);
-            System.out.println("Weather saved");
-        }
+        GetWeatherUseCase service = new WeatherService(feeder, repo);
 
+        String city = "London";
+        System.out.println(city);
+        WeatherData data = service.execute(city);
+        System.out.println(data);
+        System.out.println(
+                "Weather in " + data.getCityName() + ": " + data.getTemperature());
 
        /* REDataController reDataController = new REDataController();
 

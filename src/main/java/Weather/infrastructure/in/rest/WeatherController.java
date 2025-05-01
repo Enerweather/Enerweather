@@ -1,15 +1,15 @@
 package Weather.infrastructure.in.rest;
 
-import Weather.application.port.out.WeatherFeeder;
+import Weather.application.port.in.GetWeatherUseCase;
 import Weather.domain.model.WeatherData;
 
 public class WeatherController{
-    private final WeatherFeeder feeder;
-    public WeatherController(WeatherFeeder feeder){
-        this.feeder = feeder;
+    private final GetWeatherUseCase getWeather;
+    public WeatherController(GetWeatherUseCase getWeather) {
+        this.getWeather = getWeather;
     }
 
-    public WeatherData getWeatherData(String location){
-        return feeder.fetchCurrentWeather(location);
+    public WeatherData getWeatherData(String city){
+        return getWeather.execute(city);
     }
 }
