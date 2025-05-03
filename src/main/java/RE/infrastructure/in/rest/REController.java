@@ -1,25 +1,21 @@
 package RE.infrastructure.in.rest;
 
-import RE.application.port.out.REFeeder;
+import RE.application.port.in.GetERDataUseCase;
 import RE.domain.model.REData;
-import RE.infrastructure.out.api.REDataFeeder;
+
 import RE.infrastructure.out.api.REDataFetchException;
 import java.util.List;
 
 
 public class REController {
-    private final REFeeder feeder;
-    public REController() {
-        this.feeder = new REDataFeeder(
-                "https://apidatos.ree.es/en/datos/balance/balance-electrico"
-        );
-    }
+    private final GetERDataUseCase useCase;
 
-    public REController(String baseUrl) {
-        this.feeder = new REDataFeeder(baseUrl);
+    public REController(GetERDataUseCase useCase) {
+
+        this.useCase = useCase;
     }
 
     public List<REData> getEnergyData() throws REDataFetchException {
-        return feeder.fetchEnergyData();
+        return useCase.execute();
     }
 }

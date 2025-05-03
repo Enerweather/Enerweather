@@ -36,7 +36,7 @@ public class REDataFeeder implements REFeeder {
     @Override
     public List<REData> fetchEnergyData() throws REDataFetchException {
         try {
-            LocalDate queryDate = LocalDate.now().minusDays(1);
+            LocalDate queryDate = LocalDate.now().minusDays(4);
             String start = queryDate.atStartOfDay().format(formatter);
             String end = queryDate.atTime(23, 59, 59).format(formatter);
 

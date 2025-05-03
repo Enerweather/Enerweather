@@ -1,3 +1,10 @@
+import RE.application.port.out.REFeeder;
+import RE.application.port.in.GetERDataUseCase;
+import RE.application.service.REDataService;
+import RE.domain.model.REData;
+import RE.infrastructure.in.rest.REController;
+import RE.infrastructure.out.api.REDataFeeder;
+import RE.infrastructure.out.api.REDataFetchException;
 import Weather.application.port.in.GetWeatherUseCase;
 import Weather.application.port.out.WeatherFeeder;
 import Weather.application.port.out.WeatherRepositoryPort;
@@ -6,6 +13,8 @@ import Weather.domain.model.WeatherData;
 import Weather.infrastructure.out.api.OWMFeeder;
 import Weather.infrastructure.out.persistence.DBInitializer;
 import Weather.infrastructure.out.persistence.WeatherRepository;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -36,5 +45,18 @@ public class Main {
         }
 
         */
+
+        String reUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
+        REFeeder reFeeder     = new REDataFeeder(reUrl);
+        GetERDataUseCase reUc = new REDataService(reFeeder);
+        REController reCtrl   = new REController(reUc);
+
+        try {
+            List<REData> list = reCtrl.getEnergyData();
+            System.out.println("Fetched " + list.size() + " RE entries");
+        } catch (REDataFetchException ex) {
+            System.err.println("RE error: " + ex.getMessage());
+        }
+
     }
 }
