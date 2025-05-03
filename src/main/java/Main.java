@@ -1,3 +1,4 @@
+import RE.application.port.out.REDataRepositoryPort;
 import RE.application.port.out.REFeeder;
 import RE.application.port.in.GetERDataUseCase;
 import RE.application.service.REDataService;
@@ -5,6 +6,8 @@ import RE.domain.model.REData;
 import RE.infrastructure.in.rest.REController;
 import RE.infrastructure.out.api.REDataFeeder;
 import RE.infrastructure.out.api.REDataFetchException;
+import RE.infrastructure.out.persistence.REDBInitializer;
+import RE.infrastructure.out.persistence.REDataRepository;
 import Weather.application.port.in.GetWeatherUseCase;
 import Weather.application.port.out.WeatherFeeder;
 import Weather.application.port.out.WeatherRepositoryPort;
@@ -24,7 +27,6 @@ public class Main {
 
         WeatherFeeder feeder = new OWMFeeder(apiKey);
         WeatherRepositoryPort repo = new WeatherRepository();
-
         GetWeatherUseCase service = new WeatherService(feeder, repo);
 
         String city = "London";
@@ -32,28 +34,26 @@ public class Main {
         System.out.println(
                 "Weather in " + data.getCityName() + ": " + data.getTemperature());
 
-       /* REDataController reDataController = new REDataController();
-
-        try {
-            List<REData> dataList = reDataController.getEnergyData();
-            for (REData d : dataList) {
-                System.out.printf("%s: value=%.2f, percentage=%.2f%%, date=%s%n",
-                        d.getIndicator(), d.getValue(), d.getPercentage() * 100, d.getTimestamp());
-            }
-        } catch (REDataFetchException e) {
-            System.err.println("Error fetching data: " + e.getMessage());
-        }
-
-        */
-
+        REDBInitializer.createRETable();
         String reUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
         REFeeder reFeeder     = new REDataFeeder(reUrl);
-        GetERDataUseCase reUc = new REDataService(reFeeder);
+        REDataRepositoryPort reRepo = new REDataRepository();
+        GetERDataUseCase reUc = new REDataService(reFeeder, reRepo);
         REController reCtrl   = new REController(reUc);
 
+        List<REData> reList;
         try {
-            List<REData> list = reCtrl.getEnergyData();
-            System.out.println("Fetched " + list.size() + " RE entries");
+            reList = reCtrl.getEnergyData();
+            System.out.println("Fetched " + reList.size());
+            for (REData d : reList) {
+                System.out.printf(
+                        "  • %s = %.2f (%+.2f%%) at %s%n",
+                        d.getIndicator(),
+                        d.getValue(),
+                        d.getPercentage() * 100,
+                        d.getTimestamp()
+                );
+            }
         } catch (REDataFetchException ex) {
             System.err.println("RE error: " + ex.getMessage());
         }
