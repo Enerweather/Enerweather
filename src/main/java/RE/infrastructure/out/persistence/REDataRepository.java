@@ -2,6 +2,7 @@ package RE.infrastructure.out.persistence;
 
 import RE.application.port.out.REDataRepositoryPort;
 import RE.domain.model.REData;
+import Weather.infrastructure.out.persistence.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +31,7 @@ public class REDataRepository implements REDataRepositoryPort {
                 ps.addBatch();
             }
             ps.executeBatch();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
@@ -44,27 +45,27 @@ public class REDataRepository implements REDataRepositoryPort {
                 LIMIT 1
                 """;
         try (Connection conn = DBConnection.connect();
-            PreparedStatement ps = conn.preparedStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, indicator);
-            try (ResultSet rs = ps.executeQuery()){
-                if (rs.next()){
-                    if (rs.next()){
-                        REData d = new REData();
-                        d.setIndicator(rs.getString("indicator"));
-                        d.setValue(      rs.getDouble("value"));
-                        d.setPercentage( rs.getDouble("percentage"));
-                        d.setUnit(       rs.getString("unit"));
-                        d.setTimestamp(  rs.getString("timestamp"));
-                        d.setGeoName(    rs.getString("geo_name"));
-                        d.setGeoId(      rs.getInt("geo_id"));
-                        return Optional.of(d);
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    REData d = new REData();
+                    d.setIndicator(rs.getString("indicator"));
+                    d.setValue(rs.getDouble("value"));
+                    d.setPercentage(rs.getDouble("percentage"));
+                    d.setUnit(rs.getString("unit"));
+                    d.setTimestamp(rs.getString("timestamp"));
+                    d.setGeoName(rs.getString("geo_name"));
+                    d.setGeoId(rs.getInt("geo_id"));
+                    return Optional.of(d);
                 }
-            } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
             }
-            return Optional.empty();
-        }
 
+        } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+        }
+            return Optional.empty();
     }
+
 }
+

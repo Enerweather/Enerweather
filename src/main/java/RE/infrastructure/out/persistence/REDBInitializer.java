@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class REDBInitializer {
-    public static void createRETable{
+    public static void createRETable (){
         String sql = """
                 CREATE TABLE IF NOT EXISTS re_data (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
