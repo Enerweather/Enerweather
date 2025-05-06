@@ -45,6 +45,7 @@ public class REDataFeeder implements REFeeder {
                     URLEncoder.encode(start, StandardCharsets.UTF_8),
                     URLEncoder.encode(end, StandardCharsets.UTF_8)
             );
+            System.out.println("Fetching RE data from URL: " + url);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

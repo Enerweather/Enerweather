@@ -26,4 +26,14 @@ public class REDBInitializer {
             System.err.println("ERROR: " + e.getMessage());
         }
     }
+    public static void clearRETable() {
+        String sql = "DELETE FROM re_data";
+        try (Connection conn = DBConnection.connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println("Error clearing RE table: " + e.getMessage());
+        }
+    }
+
 }

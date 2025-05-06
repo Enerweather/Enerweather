@@ -25,4 +25,14 @@ public class DBInitializer {
             System.out.println("error" + e.getMessage());
         }
     }
+    public static void clearWeatherTable() {
+        String sql = "DELETE FROM weather_data";
+        try (Connection conn = DBConnection.connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println("Error clearing weather table: " + e.getMessage());
+        }
+    }
+
 }
