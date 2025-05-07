@@ -1,6 +1,6 @@
-package RE.domain.model;
+package domain.model;
 
-public class REData {
+public class RE {
     private String indicator;
     private double value;
     private double percentage;

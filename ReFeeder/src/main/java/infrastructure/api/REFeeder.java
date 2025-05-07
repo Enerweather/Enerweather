@@ -1,7 +1,7 @@
-package RE.infrastructure.api;
+package infrastructure.api;
 
-import RE.domain.model.REData;
-import RE.application.port.REFeeder;
+import application.port.REFeederInterface;
+import domain.model.RE;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,22 +19,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class REDataFeeder implements REFeeder {
+public class REFeeder implements REFeederInterface {
     private final String baseUrl;
     private final HttpClient httpClient;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-    public REDataFeeder(String baseUrl) {
+    public REFeeder(String baseUrl) {
         this(baseUrl, HttpClient.newHttpClient());
     }
 
-    public REDataFeeder(String baseUrl, HttpClient httpClient) {
+    public REFeeder(String baseUrl, HttpClient httpClient) {
         this.baseUrl = baseUrl;
         this.httpClient = httpClient;
     }
 
     @Override
-    public List<REData> fetchEnergyData() throws REDataFetchException {
+    public List<RE> fetchEnergyData() throws REFetchException {
         try {
             LocalDate queryDate = LocalDate.now().minusDays(4);
             String start = queryDate.atStartOfDay().format(formatter);
@@ -54,7 +54,7 @@ public class REDataFeeder implements REFeeder {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new REDataFetchException("Unexpected HTTP status: " + response.statusCode());
+                throw new REFetchException("Unexpected HTTP status: " + response.statusCode());
             }
 
             JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
@@ -62,14 +62,14 @@ public class REDataFeeder implements REFeeder {
 
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new REDataFetchException("Failed to fetch energy data", e);
+            throw new REFetchException("Failed to fetch energy data", e);
         }
     }
 
-    private List<REData> parseRenovables(JsonObject root, String requestStart) throws REDataFetchException {
+    private List<RE> parseRenovables(JsonObject root, String requestStart) throws REFetchException {
         JsonArray included = root.getAsJsonArray("included");
         if (included == null) {
-            throw new REDataFetchException("No 'included' array in response");
+            throw new REFetchException("No 'included' array in response");
         }
 
         JsonObject renovGroup = null;
@@ -81,11 +81,11 @@ public class REDataFeeder implements REFeeder {
             }
         }
         if (renovGroup == null) {
-            throw new REDataFetchException("No 'Renovable' group found");
+            throw new REFetchException("No 'Renovable' group found");
         }
 
         JsonArray content = renovGroup.getAsJsonObject("attributes").getAsJsonArray("content");
-        List<REData> list = new ArrayList<>();
+        List<RE> list = new ArrayList<>();
 
         for (JsonElement ce : content) {
             JsonObject item = ce.getAsJsonObject();
@@ -94,7 +94,7 @@ public class REDataFeeder implements REFeeder {
             if (valuesArr == null || valuesArr.isEmpty()) continue;
 
             JsonObject v = valuesArr.get(0).getAsJsonObject();
-            REData data = new REData();
+            RE data = new RE();
             data.setIndicator(attrs.get("title").getAsString());
             data.setValue(v.get("value").getAsDouble());
             data.setPercentage(v.get("percentage").getAsDouble());

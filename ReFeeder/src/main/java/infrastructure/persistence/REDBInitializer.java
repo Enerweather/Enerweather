@@ -1,6 +1,6 @@
-package RE.infrastructure.persistence;
+package infrastructure.persistence;
 
-import Weather.infrastructure.persistence.DBConnection;
+import infrastructure.persistence.DBConnection;
 
 import java.sql.Connection;
 import java.sql.Statement;

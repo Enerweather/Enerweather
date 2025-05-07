@@ -1,29 +1,29 @@
-import RE.application.port.REDataRepositoryPort;
-import RE.application.port.REFeeder;
-import RE.application.port.GetERDataUseCase;
-import RE.application.service.REDataService;
-import RE.domain.model.REData;
-import RE.infrastructure.rest.REController;
-import RE.infrastructure.api.REDataFeeder;
-import RE.infrastructure.api.REDataFetchException;
-import RE.infrastructure.persistence.REDBInitializer;
-import RE.infrastructure.persistence.REDataRepository;
+import application.port.RERepositoryPort;
+import application.port.REFeederInterface;
+import application.port.GetERUseCase;
+import application.service.REService;
+import domain.model.RE;
+import infrastructure.api.REFeeder;
+import infrastructure.rest.REController;
+import infrastructure.api.REFetchException;
+import infrastructure.persistence.REDBInitializer;
+import infrastructure.persistence.RERepository;
 
 import java.util.List;
 public class Main {
     public static void main(String[] args) {
         REDBInitializer.createRETable();
         String reUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
-        REFeeder reFeeder = new REDataFeeder(reUrl);
-        REDataRepositoryPort reRepo = new REDataRepository();
-        GetERDataUseCase reUc = new REDataService(reFeeder, reRepo);
+        REFeederInterface reFeeder = new REFeeder(reUrl);
+        RERepositoryPort reRepo = new RERepository();
+        GetERUseCase reUc = new REService(reFeeder, reRepo);
         REController reCtrl = new REController(reUc);
 
-        List<REData> reList;
+        List<RE> reList;
         try {
             reList = reCtrl.getEnergyData();
             System.out.println("Fetched " + reList.size());
-            for (REData d : reList) {
+            for (RE d : reList) {
                 System.out.printf(
                         "  • %s = %.2f (%+.2f%%) at %s%n",
                         d.getIndicator(),
@@ -32,7 +32,7 @@ public class Main {
                         d.getTimestamp()
                 );
             }
-        } catch (REDataFetchException ex) {
+        } catch (REFetchException ex) {
             System.err.println("RE error: " + ex.getMessage());
         }
     }

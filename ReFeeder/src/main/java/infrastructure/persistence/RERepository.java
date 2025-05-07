@@ -1,8 +1,7 @@
-package RE.infrastructure.persistence;
+package infrastructure.persistence;
 
-import RE.application.port.REDataRepositoryPort;
-import RE.domain.model.REData;
-import Weather.infrastructure.persistence.DBConnection;
+import application.port.RERepositoryPort;
+import domain.model.RE;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,9 +9,9 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
-public class REDataRepository implements REDataRepositoryPort {
+public class RERepository implements RERepositoryPort {
     @Override
-    public void saveAll(List<REData> batch) {
+    public void saveAll(List<RE> batch) {
         String sql = """
                 INSERT INTO re_data
                 (indicator, value, percentage, unit, timestamp, geo_name, geo_id)
@@ -20,7 +19,7 @@ public class REDataRepository implements REDataRepositoryPort {
                 """;
         try (Connection conn = DBConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (REData d : batch) {
+            for (RE d : batch) {
                 ps.setString(1, d.getIndicator());
                 ps.setDouble(2, d.getValue());
                 ps.setDouble(3, d.getPercentage());
@@ -36,7 +35,7 @@ public class REDataRepository implements REDataRepositoryPort {
         }
     }
     @Override
-    public Optional<REData> findLatestByIndicator(String indicator) {
+    public Optional<RE> findLatestByIndicator(String indicator) {
         String sql = """
                 SELECT indicator,value,percentage,unit,timestamp,geo_name,geo_id
                 FROM re_data
@@ -49,7 +48,7 @@ public class REDataRepository implements REDataRepositoryPort {
             ps.setString(1, indicator);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    REData d = new REData();
+                    RE d = new RE();
                     d.setIndicator(rs.getString("indicator"));
                     d.setValue(rs.getDouble("value"));
                     d.setPercentage(rs.getDouble("percentage"));
