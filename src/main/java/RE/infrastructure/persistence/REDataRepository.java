@@ -1,8 +1,8 @@
-package RE.infrastructure.out.persistence;
+package RE.infrastructure.persistence;
 
-import RE.application.port.out.REDataRepositoryPort;
+import RE.application.port.REDataRepositoryPort;
 import RE.domain.model.REData;
-import Weather.infrastructure.out.persistence.DBConnection;
+import Weather.infrastructure.persistence.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

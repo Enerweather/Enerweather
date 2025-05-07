@@ -1,10 +1,10 @@
 package RE.application.service;
 
-import RE.application.port.in.GetERDataUseCase;
-import RE.application.port.out.REDataRepositoryPort;
-import RE.application.port.out.REFeeder;
+import RE.application.port.GetERDataUseCase;
+import RE.application.port.REDataRepositoryPort;
+import RE.application.port.REFeeder;
 import RE.domain.model.REData;
-import RE.infrastructure.out.api.REDataFetchException;
+import RE.infrastructure.api.REDataFetchException;
 
 import java.util.List;
 

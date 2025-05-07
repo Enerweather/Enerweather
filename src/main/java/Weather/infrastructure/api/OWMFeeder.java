@@ -1,7 +1,7 @@
-package Weather.infrastructure.out.api;
+package Weather.infrastructure.api;
 
 import Weather.domain.model.WeatherData;
-import Weather.application.port.out.WeatherFeeder;
+import Weather.application.port.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

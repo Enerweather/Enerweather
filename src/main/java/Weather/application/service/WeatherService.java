@@ -1,8 +1,8 @@
 package Weather.application.service;
 
-import Weather.application.port.in.GetWeatherUseCase;
-import Weather.application.port.out.WeatherFeeder;
-import Weather.application.port.out.WeatherRepositoryPort;
+import Weather.application.port.GetWeatherUseCase;
+import Weather.application.port.WeatherFeeder;
+import Weather.application.port.WeatherRepositoryPort;
 import Weather.domain.model.WeatherData;
 
 public class WeatherService implements GetWeatherUseCase {

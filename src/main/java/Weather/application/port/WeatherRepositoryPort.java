@@ -1,4 +1,4 @@
-package Weather.application.port.out;
+package Weather.application.port;
 import Weather.domain.model.WeatherData;
 import java.util.Optional;
 public interface WeatherRepositoryPort {

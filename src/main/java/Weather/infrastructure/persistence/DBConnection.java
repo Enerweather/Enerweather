@@ -1,4 +1,4 @@
-package Weather.infrastructure.out.persistence;
+package Weather.infrastructure.persistence;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;

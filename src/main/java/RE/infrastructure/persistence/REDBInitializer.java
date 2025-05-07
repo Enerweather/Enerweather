@@ -1,9 +1,8 @@
-package RE.infrastructure.out.persistence;
+package RE.infrastructure.persistence;
 
-import Weather.infrastructure.out.persistence.DBConnection;
+import Weather.infrastructure.persistence.DBConnection;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class REDBInitializer {

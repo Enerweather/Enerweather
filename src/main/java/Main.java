@@ -1,21 +1,21 @@
-import RE.application.port.out.REDataRepositoryPort;
-import RE.application.port.out.REFeeder;
-import RE.application.port.in.GetERDataUseCase;
+import RE.application.port.REDataRepositoryPort;
+import RE.application.port.REFeeder;
+import RE.application.port.GetERDataUseCase;
 import RE.application.service.REDataService;
 import RE.domain.model.REData;
-import RE.infrastructure.in.rest.REController;
-import RE.infrastructure.out.api.REDataFeeder;
-import RE.infrastructure.out.api.REDataFetchException;
-import RE.infrastructure.out.persistence.REDBInitializer;
-import RE.infrastructure.out.persistence.REDataRepository;
-import Weather.application.port.in.GetWeatherUseCase;
-import Weather.application.port.out.WeatherFeeder;
-import Weather.application.port.out.WeatherRepositoryPort;
+import RE.infrastructure.rest.REController;
+import RE.infrastructure.api.REDataFeeder;
+import RE.infrastructure.api.REDataFetchException;
+import RE.infrastructure.persistence.REDBInitializer;
+import RE.infrastructure.persistence.REDataRepository;
+import Weather.application.port.GetWeatherUseCase;
+import Weather.application.port.WeatherFeeder;
+import Weather.application.port.WeatherRepositoryPort;
 import Weather.application.service.WeatherService;
 import Weather.domain.model.WeatherData;
-import Weather.infrastructure.out.api.OWMFeeder;
-import Weather.infrastructure.out.persistence.DBInitializer;
-import Weather.infrastructure.out.persistence.WeatherRepository;
+import Weather.infrastructure.api.OWMFeeder;
+import Weather.infrastructure.persistence.DBInitializer;
+import Weather.infrastructure.persistence.WeatherRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package RE.application.port.out;
+package RE.application.port;
 
 import RE.domain.model.REData;
 

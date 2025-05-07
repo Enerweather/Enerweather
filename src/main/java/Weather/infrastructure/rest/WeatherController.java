@@ -1,6 +1,6 @@
-package Weather.infrastructure.in.rest;
+package Weather.infrastructure.rest;
 
-import Weather.application.port.in.GetWeatherUseCase;
+import Weather.application.port.GetWeatherUseCase;
 import Weather.domain.model.WeatherData;
 
 public class WeatherController{

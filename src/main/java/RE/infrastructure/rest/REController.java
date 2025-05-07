@@ -1,9 +1,9 @@
-package RE.infrastructure.in.rest;
+package RE.infrastructure.rest;
 
-import RE.application.port.in.GetERDataUseCase;
+import RE.application.port.GetERDataUseCase;
 import RE.domain.model.REData;
 
-import RE.infrastructure.out.api.REDataFetchException;
+import RE.infrastructure.api.REDataFetchException;
 import java.util.List;
 
 

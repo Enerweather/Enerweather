@@ -1,6 +1,6 @@
-package Weather.infrastructure.out.persistence;
+package Weather.infrastructure.persistence;
 
-import Weather.application.port.out.WeatherRepositoryPort;
+import Weather.application.port.WeatherRepositoryPort;
 import Weather.domain.model.WeatherData;
 
 import java.sql.Connection;
