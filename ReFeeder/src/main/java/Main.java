@@ -25,7 +25,7 @@ public class Main {
             System.out.println("Fetched " + reList.size());
             for (RE d : reList) {
                 System.out.printf(
-                        "  • %s = %.2f (%+.2f%%) at %s%n",
+                        "%s = %.2f (%+.2f%%) at %s%n",
                         d.getIndicator(),
                         d.getValue(),
                         d.getPercentage() * 100,
