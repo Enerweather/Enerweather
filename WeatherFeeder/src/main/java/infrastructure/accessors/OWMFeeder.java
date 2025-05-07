@@ -1,7 +1,7 @@
-package Weather.infrastructure.api;
+package infrastructure.accessors;
 
-import Weather.domain.model.WeatherData;
-import Weather.application.port.WeatherFeeder;
+import domain.model.Weather;
+import application.port.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -19,7 +19,7 @@ public class OWMFeeder implements WeatherFeeder {
     }
 
     @Override
-    public WeatherData fetchCurrentWeather(String location) {
+    public Weather fetchCurrentWeather(String location) {
         try{
             String urlString = baseUrl + "weather?q=" + URLEncoder.encode(location, "UTF-8") + "&appid=" + apiKey + "&units=metric";
             HttpURLConnection conn = (HttpURLConnection) new URL(urlString).openConnection();
@@ -33,7 +33,7 @@ public class OWMFeeder implements WeatherFeeder {
             JsonObject wind = json.getAsJsonObject("wind");
             JsonObject weather = json.getAsJsonArray("weather").get(0).getAsJsonObject();
 
-            WeatherData weatherData = new WeatherData();
+            Weather weatherData = new Weather();
             weatherData.setTemperature(main.get("temp").getAsDouble());
             weatherData.setHumidity(main.get("humidity").getAsInt());
             weatherData.setPressure(main.get("pressure").getAsInt());

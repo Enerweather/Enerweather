@@ -1,6 +1,6 @@
-package Weather.domain.model;
+package domain.model;
 
-public class WeatherData {
+public class Weather {
     private double temperature;
     private int humidity;
     private int pressure;

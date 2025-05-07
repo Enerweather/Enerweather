@@ -1,9 +1,9 @@
-package Weather.application.service;
+package application.service;
 
-import Weather.application.port.GetWeatherUseCase;
-import Weather.application.port.WeatherFeeder;
-import Weather.application.port.WeatherRepositoryPort;
-import Weather.domain.model.WeatherData;
+import application.port.GetWeatherUseCase;
+import application.port.WeatherFeeder;
+import application.port.WeatherRepositoryPort;
+import domain.model.Weather;
 
 public class WeatherService implements GetWeatherUseCase {
     private final WeatherFeeder feeder;
@@ -15,8 +15,8 @@ public class WeatherService implements GetWeatherUseCase {
     }
 
     @Override
-    public WeatherData execute(String city) {
-        WeatherData weatherData = feeder.fetchCurrentWeather(city);
+    public Weather execute(String city) {
+        Weather weatherData = feeder.fetchCurrentWeather(city);
         repository.save(weatherData);
         return weatherData;
     }

@@ -7,6 +7,11 @@
     <groupId>org.ulpgc.dacd</groupId>
     <artifactId>Enerweather</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>WeatherFeeder</module>
+        <module>ReFeeder</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

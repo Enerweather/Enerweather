@@ -1,7 +1,7 @@
-package Weather.infrastructure.persistence;
+package infrastructure.persistence;
 
-import Weather.application.port.WeatherRepositoryPort;
-import Weather.domain.model.WeatherData;
+import application.port.WeatherRepositoryPort;
+import domain.model.Weather;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class WeatherRepository implements WeatherRepositoryPort {
     @Override
-    public void save(WeatherData data){
+    public void save(Weather data){
         String sql = "INSERT INTO weather_data (temperature, humidity, pressure, wind_speed, description, city_name, timestamp)" +
                 "VALUES (?,?,?,?,?,?, datetime('now'))";
 
@@ -30,7 +30,7 @@ public class WeatherRepository implements WeatherRepositoryPort {
 
     }
     @Override
-    public Optional<WeatherData> findLatest(String city) {
+    public Optional<Weather> findLatest(String city) {
         String sql = """
                 SELECT temperature, humidity, pressure, wind_speed, description, city_name
                 FROM   weather_data
@@ -45,7 +45,7 @@ public class WeatherRepository implements WeatherRepositoryPort {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    WeatherData d = new WeatherData();
+                    Weather d = new Weather();
                     d.setTemperature(rs.getDouble("temperature"));
                     d.setHumidity(rs.getInt("humidity"));
                     d.setPressure(rs.getInt("pressure"));

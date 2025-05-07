@@ -1,4 +1,4 @@
-package Weather.infrastructure.persistence;
+package infrastructure.persistence;
 
 import java.sql.Connection;
 import java.sql.Statement;

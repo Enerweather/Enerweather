@@ -1,7 +1,7 @@
-package Weather.infrastructure.rest;
+package infrastructure.rest;
 
-import Weather.application.port.GetWeatherUseCase;
-import Weather.domain.model.WeatherData;
+import application.port.GetWeatherUseCase;
+import domain.model.Weather;
 
 public class WeatherController{
     private final GetWeatherUseCase getWeather;
@@ -9,7 +9,7 @@ public class WeatherController{
         this.getWeather = getWeather;
     }
 
-    public WeatherData getWeatherData(String city){
+    public Weather getWeatherData(String city){
         return getWeather.execute(city);
     }
 }
