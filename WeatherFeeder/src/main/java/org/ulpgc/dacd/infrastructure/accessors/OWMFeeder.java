@@ -1,7 +1,7 @@
-package infrastructure.accessors;
+package org.ulpgc.dacd.infrastructure.accessors;
 
-import domain.model.Weather;
-import application.port.WeatherFeeder;
+import org.ulpgc.dacd.domain.model.Weather;
+import org.ulpgc.dacd.application.port.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

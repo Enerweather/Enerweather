@@ -1,4 +1,4 @@
-package domain.model;
+package org.ulpgc.dacd.domain.model;
 
 public class Weather {
     private double temperature;

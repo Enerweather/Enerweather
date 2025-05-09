@@ -1,4 +1,4 @@
-package infrastructure.persistence;
+package org.ulpgc.dacd.infrastructure.persistence;
 
 import java.sql.Connection;
 import java.sql.Statement;

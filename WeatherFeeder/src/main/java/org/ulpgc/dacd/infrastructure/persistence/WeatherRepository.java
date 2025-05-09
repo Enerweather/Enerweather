@@ -1,7 +1,7 @@
-package infrastructure.persistence;
+package org.ulpgc.dacd.infrastructure.persistence;
 
-import application.port.WeatherRepositoryPort;
-import domain.model.Weather;
+import org.ulpgc.dacd.application.port.WeatherRepositoryPort;
+import org.ulpgc.dacd.domain.model.Weather;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

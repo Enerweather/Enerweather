@@ -1,7 +1,7 @@
-package infrastructure.rest;
+package org.ulpgc.dacd.infrastructure.rest;
 
-import application.port.GetWeatherUseCase;
-import domain.model.Weather;
+import org.ulpgc.dacd.application.port.GetWeatherUseCase;
+import org.ulpgc.dacd.domain.model.Weather;
 
 public class WeatherController{
     private final GetWeatherUseCase getWeather;

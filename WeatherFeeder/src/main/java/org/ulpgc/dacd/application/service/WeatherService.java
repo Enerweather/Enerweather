@@ -1,11 +1,12 @@
-package application.service;
+package org.ulpgc.dacd.application.service;
 
-import application.port.GetWeatherUseCase;
-import application.port.WeatherFeeder;
-import application.port.WeatherRepositoryPort;
-import domain.model.Weather;
-import org.ulpgc.dacd.MessagePublisher;
+import org.ulpgc.dacd.application.port.EventPublisher;
+import org.ulpgc.dacd.application.port.GetWeatherUseCase;
+import org.ulpgc.dacd.application.port.WeatherFeeder;
+import org.ulpgc.dacd.application.port.WeatherRepositoryPort;
+import org.ulpgc.dacd.domain.model.Weather;
 import com.google.gson.Gson;
+import org.ulpgc.dacd.infrastructure.messaging.MessagePublisher;
 
 public class WeatherService implements GetWeatherUseCase {
     private final WeatherFeeder feeder;
@@ -25,8 +26,8 @@ public class WeatherService implements GetWeatherUseCase {
             Gson gson = new Gson();
             String json = gson.toJson(weatherData);
 
-            MessagePublisher publisher = new MessagePublisher("weather.topic");
-            publisher.sendMessage(json);
+            EventPublisher publisher = new MessagePublisher();
+            publisher.publish(json);
             publisher.close();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
