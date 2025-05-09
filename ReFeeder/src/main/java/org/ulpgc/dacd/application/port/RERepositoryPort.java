@@ -1,6 +1,6 @@
-package application.port;
+package org.ulpgc.dacd.application.port;
 
-import domain.model.RE;
+import org.ulpgc.dacd.domain.model.RE;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
-package infrastructure.api;
+package org.ulpgc.dacd.infrastructure.api;
 
-import application.port.REFeederInterface;
-import domain.model.RE;
+import org.ulpgc.dacd.application.port.REFeederInterface;
+import org.ulpgc.dacd.domain.model.RE;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -1,7 +1,7 @@
-package infrastructure.persistence;
+package org.ulpgc.dacd.infrastructure.persistence;
 
-import application.port.RERepositoryPort;
-import domain.model.RE;
+import org.ulpgc.dacd.application.port.RERepositoryPort;
+import org.ulpgc.dacd.domain.model.RE;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

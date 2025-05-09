@@ -1,13 +1,13 @@
-import application.port.RERepositoryPort;
-import application.port.REFeederInterface;
-import application.port.GetERUseCase;
-import application.service.REService;
-import domain.model.RE;
-import infrastructure.api.REFeeder;
-import infrastructure.rest.REController;
-import infrastructure.api.REFetchException;
-import infrastructure.persistence.REDBInitializer;
-import infrastructure.persistence.RERepository;
+import org.ulpgc.dacd.application.port.RERepositoryPort;
+import org.ulpgc.dacd.application.port.REFeederInterface;
+import org.ulpgc.dacd.application.port.GetERUseCase;
+import org.ulpgc.dacd.application.service.REService;
+import org.ulpgc.dacd.domain.model.RE;
+import org.ulpgc.dacd.infrastructure.api.REFeeder;
+import org.ulpgc.dacd.infrastructure.rest.REController;
+import org.ulpgc.dacd.infrastructure.api.REFetchException;
+import org.ulpgc.dacd.infrastructure.persistence.REDBInitializer;
+import org.ulpgc.dacd.infrastructure.persistence.RERepository;
 
 import java.util.List;
 public class Main {

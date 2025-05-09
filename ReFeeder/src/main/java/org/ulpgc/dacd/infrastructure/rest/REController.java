@@ -1,9 +1,9 @@
-package infrastructure.rest;
+package org.ulpgc.dacd.infrastructure.rest;
 
-import application.port.GetERUseCase;
-import domain.model.RE;
+import org.ulpgc.dacd.application.port.GetERUseCase;
+import org.ulpgc.dacd.domain.model.RE;
 
-import infrastructure.api.REFetchException;
+import org.ulpgc.dacd.infrastructure.api.REFetchException;
 import java.util.List;
 
 

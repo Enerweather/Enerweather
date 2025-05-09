@@ -1,11 +1,12 @@
-package application.service;
+package org.ulpgc.dacd.application.service;
 
-import application.port.GetERUseCase;
-import application.port.RERepositoryPort;
-import application.port.REFeederInterface;
-import domain.model.RE;
-import infrastructure.api.REFetchException;
-import org.ulpgc.dacd.MessagePublisher;
+import org.ulpgc.dacd.application.port.EventPublisher;
+import org.ulpgc.dacd.application.port.GetERUseCase;
+import org.ulpgc.dacd.application.port.RERepositoryPort;
+import org.ulpgc.dacd.application.port.REFeederInterface;
+import org.ulpgc.dacd.domain.model.RE;
+import org.ulpgc.dacd.infrastructure.api.REFetchException;
+import org.ulpgc.dacd.infrastructure.messaging.MessagePublisher;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -26,12 +27,11 @@ public class REService implements GetERUseCase {
             repository.saveAll(batch);
 
             try {
-                MessagePublisher publisher = new MessagePublisher("energy.topic");
                 Gson gson = new Gson();
-                for (RE data : batch) {
-                    String json = gson.toJson(data);
-                    publisher.sendMessage(json);
-                }
+                String json = gson.toJson(batch);
+
+                EventPublisher publisher = new MessagePublisher();
+                publisher.publish(json);
                 publisher.close();
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
