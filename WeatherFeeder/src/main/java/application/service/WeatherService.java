@@ -25,7 +25,7 @@ public class WeatherService implements GetWeatherUseCase {
             Gson gson = new Gson();
             String json = gson.toJson(weatherData);
 
-            MessagePublisher publisher = new MessagePublisher();
+            MessagePublisher publisher = new MessagePublisher("weather.topic");
             publisher.sendMessage(json);
             publisher.close();
         } catch (Exception e) {
