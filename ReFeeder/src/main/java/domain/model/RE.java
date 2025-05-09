@@ -9,7 +9,7 @@ public class RE {
     private String geoName;
     private int geoId;
 
-    //getter y setter
+
     public String getIndicator() { return indicator; }
     public void setIndicator(String indicator) { this.indicator = indicator; }
     public double getValue() { return value; }

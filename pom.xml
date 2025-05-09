@@ -11,6 +11,7 @@
     <modules>
         <module>ReFeeder</module>
         <module>WeatherFeeder</module>
+        <module>EnerweatherBuilder</module>
     </modules>
 
     <properties>
@@ -44,6 +45,11 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.19.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.15.12</version>
         </dependency>
     </dependencies>
 
