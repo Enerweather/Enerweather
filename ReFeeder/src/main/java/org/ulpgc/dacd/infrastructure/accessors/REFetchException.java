@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.infrastructure.api;
+package org.ulpgc.dacd.infrastructure.accessors;
 
 public class REFetchException extends Exception {
     public REFetchException(String message) {

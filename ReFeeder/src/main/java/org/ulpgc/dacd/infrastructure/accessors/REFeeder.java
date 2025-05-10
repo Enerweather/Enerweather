@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.infrastructure.api;
+package org.ulpgc.dacd.infrastructure.accessors;
 
 import org.ulpgc.dacd.application.port.REFeederInterface;
 import org.ulpgc.dacd.domain.model.RE;

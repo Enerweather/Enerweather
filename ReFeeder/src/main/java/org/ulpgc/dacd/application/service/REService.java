@@ -5,7 +5,7 @@ import org.ulpgc.dacd.application.port.GetERUseCase;
 import org.ulpgc.dacd.application.port.RERepositoryPort;
 import org.ulpgc.dacd.application.port.REFeederInterface;
 import org.ulpgc.dacd.domain.model.RE;
-import org.ulpgc.dacd.infrastructure.api.REFetchException;
+import org.ulpgc.dacd.infrastructure.accessors.REFetchException;
 import org.ulpgc.dacd.infrastructure.messaging.MessagePublisher;
 import com.google.gson.Gson;
 

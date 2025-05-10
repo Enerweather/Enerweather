@@ -5,6 +5,7 @@ import org.ulpgc.dacd.application.port.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
@@ -19,12 +20,14 @@ public class OWMFeeder implements WeatherFeeder {
     }
 
     @Override
-    public Weather fetchCurrentWeather(String location) {
+    public Weather fetchCurrentWeather(String location) throws WeatherFetchException{
         try{
             String urlString = baseUrl + "weather?q=" + URLEncoder.encode(location, "UTF-8") + "&appid=" + apiKey + "&units=metric";
             HttpURLConnection conn = (HttpURLConnection) new URL(urlString).openConnection();
             conn.setRequestMethod("GET");
-
+            if (conn.getResponseCode() != 200) {
+                throw new WeatherFetchException("Unexpected HTTP status: " + conn.getResponseCode());
+            }
             JsonObject json = JsonParser
                     .parseReader(new InputStreamReader(conn.getInputStream()))
                     .getAsJsonObject();
@@ -42,8 +45,8 @@ public class OWMFeeder implements WeatherFeeder {
             weatherData.setCityName(json.get("name").getAsString());
             return weatherData;
         } catch (Exception e) {
-            System.out.println("Error" + e.getMessage());
-            return null;
+            Thread.currentThread().interrupt();
+            throw new WeatherFetchException("Failed to fetch weather data", e);
         }
 
     }

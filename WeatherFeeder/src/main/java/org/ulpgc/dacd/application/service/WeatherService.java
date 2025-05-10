@@ -6,6 +6,7 @@ import org.ulpgc.dacd.application.port.WeatherFeeder;
 import org.ulpgc.dacd.application.port.WeatherRepositoryPort;
 import org.ulpgc.dacd.domain.model.Weather;
 import com.google.gson.Gson;
+import org.ulpgc.dacd.infrastructure.accessors.WeatherFetchException;
 import org.ulpgc.dacd.infrastructure.messaging.MessagePublisher;
 
 public class WeatherService implements GetWeatherUseCase {
@@ -19,19 +20,24 @@ public class WeatherService implements GetWeatherUseCase {
 
     @Override
     public Weather execute(String city) {
-        Weather weatherData = feeder.fetchCurrentWeather(city);
-        repository.save(weatherData);
-
+        Weather weatherData = null;
         try {
-            Gson gson = new Gson();
-            String json = gson.toJson(weatherData);
+            weatherData = feeder.fetchCurrentWeather(city);
+            repository.save(weatherData);
+            try {
+                Gson gson = new Gson();
+                String json = gson.toJson(weatherData);
 
-            EventPublisher publisher = new MessagePublisher();
-            publisher.publish(json);
-            publisher.close();
-        } catch (Exception e) {
+                EventPublisher publisher = new MessagePublisher();
+                publisher.publish(json);
+                publisher.close();
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+            return weatherData;
+        } catch (WeatherFetchException e) {
             System.out.println("Error: " + e.getMessage());
+            return null;
         }
-        return weatherData;
     }
 }

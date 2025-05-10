@@ -3,7 +3,7 @@ package org.ulpgc.dacd.infrastructure.rest;
 import org.ulpgc.dacd.application.port.GetERUseCase;
 import org.ulpgc.dacd.domain.model.RE;
 
-import org.ulpgc.dacd.infrastructure.api.REFetchException;
+import org.ulpgc.dacd.infrastructure.accessors.REFetchException;
 import java.util.List;
 
 
