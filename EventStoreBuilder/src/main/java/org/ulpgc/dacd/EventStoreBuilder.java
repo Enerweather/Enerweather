@@ -9,22 +9,38 @@ public class EventStoreBuilder {
     private Connection connection;
     private Session session;
 
-    public void start() throws JMSException {
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        connection = connectionFactory.createConnection();
-        connection.setClientID("EventStoreClient");
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+    public void start()  {
+        try {
+            connectToBroker();
+            System.out.println("Connected to activemq broker");
+        } catch (JMSException e) {
+            System.err.println("Failed to connect to activemq broker");
+            try {
+                    Thread.sleep(3000);
+                    connectToBroker();
+                    System.out.println("Connected to activemq broker");
+                } catch (Exception ex){
+                    System.err.println("Failed to connect to activemq broker");
+                }
+            }
+        }
 
-        subscribe("weather.topic");
-        subscribe("energy.topic");
+        private void connectToBroker() throws JMSException{
+            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+            connection = connectionFactory.createConnection();
+            connection.setClientID("EventStoreClient");
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        connection.start();
-    }
+            subscribe("weather.topic");
+            subscribe("energy.topic");
 
-    private void subscribe(String topicName) throws JMSException {
-        Topic topic = session.createTopic(topicName);
-        MessageConsumer consumer = session.createDurableSubscriber(topic, topicName);
-        JsonMessageListener listener = new JsonMessageListener();
-        consumer.setMessageListener(listener);
+            connection.start();
+        }
+        private void subscribe(String topicName) throws JMSException {
+            Topic topic = session.createTopic(topicName);
+            MessageConsumer consumer = session.createDurableSubscriber(topic, topicName);
+            JsonMessageListener listener = new JsonMessageListener();
+            consumer.setMessageListener(listener);
+
     }
 }
