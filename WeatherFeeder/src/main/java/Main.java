@@ -1,17 +1,16 @@
-import application.port.GetWeatherUseCase;
-import application.port.WeatherFeeder;
-import application.port.WeatherRepositoryPort;
-import application.service.WeatherService;
-import domain.model.Weather;
-import infrastructure.accessors.OWMFeeder;
-import infrastructure.persistence.DBInitializer;
-import infrastructure.persistence.WeatherRepository;
+import org.ulpgc.dacd.application.port.GetWeatherUseCase;
+import org.ulpgc.dacd.application.port.WeatherFeeder;
+import org.ulpgc.dacd.application.port.WeatherRepositoryPort;
+import org.ulpgc.dacd.application.service.WeatherService;
+import org.ulpgc.dacd.domain.model.Weather;
+import org.ulpgc.dacd.infrastructure.accessors.OWMFeeder;
+import org.ulpgc.dacd.infrastructure.persistence.DBInitializer;
+import org.ulpgc.dacd.infrastructure.persistence.WeatherRepository;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
         String apiKey = args[0];
 
         DBInitializer.createWeatherTable();
