@@ -9,10 +9,9 @@ public class Main {
             builder.start();
             System.out.println("EventStoreBuilder started. Hit Ctrl+C to exit.");
             Thread.currentThread().join();
-        } catch (JMSException e) {
+        } catch (InterruptedException e) {
             System.err.println("Failed to start EventStoreBuilder: " + e.getMessage());
             e.printStackTrace();
-        } catch (InterruptedException ie) {
         }
     }
 }

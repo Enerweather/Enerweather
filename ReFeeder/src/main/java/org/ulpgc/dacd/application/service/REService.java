@@ -1,5 +1,7 @@
 package org.ulpgc.dacd.application.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ulpgc.dacd.application.port.EventPublisher;
 import org.ulpgc.dacd.application.port.GetERUseCase;
 import org.ulpgc.dacd.application.port.RERepositoryPort;
@@ -9,9 +11,12 @@ import org.ulpgc.dacd.infrastructure.accessors.REFetchException;
 import org.ulpgc.dacd.infrastructure.messaging.MessagePublisher;
 import com.google.gson.Gson;
 
+import javax.jms.JMSException;
+import java.io.IOException;
 import java.util.List;
 
 public class REService implements GetERUseCase {
+    private static final Logger log = LoggerFactory.getLogger(REService.class);
     private final REFeederInterface feeder;
     private final RERepositoryPort repository;
 
@@ -26,15 +31,14 @@ public class REService implements GetERUseCase {
             List<RE> batch = feeder.fetchEnergyData();
             repository.saveAll(batch);
 
-            try {
+            try(MessagePublisher publisher = new MessagePublisher()) {
                 Gson gson = new Gson();
-                String json = gson.toJson(batch);
-
-                EventPublisher publisher = new MessagePublisher();
-                publisher.publish(json);
-                publisher.close();
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                for (RE re : batch) {
+                    String json = gson.toJson(re);
+                    publisher.publish(json);
+                }
+            } catch (JMSException e) {
+                log.error("Failed to publish events for {} records", batch.size(), e);
             }
             return batch;
         } catch (REFetchException e) {

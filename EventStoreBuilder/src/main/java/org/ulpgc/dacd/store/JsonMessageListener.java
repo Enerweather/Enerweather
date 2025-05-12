@@ -11,13 +11,16 @@ import javax.jms.TextMessage;
 public class JsonMessageListener implements MessageListener {
     private final Gson gson = new Gson();
     private final FileEventWriter writer = new FileEventWriter();
+
     public void onMessage(Message message) {
         try {
-            if (message instanceof TextMessage) {
-                String json = ((TextMessage) message).getText();
-                JsonObject event = gson.fromJson(json, JsonObject.class);
-                writer.handleEvent(message.getJMSDestination().toString(), event);
-            }
+            if (!(message instanceof TextMessage)) return;
+            String json = ((TextMessage) message).getText();
+            JsonObject event = gson.fromJson(json, JsonObject.class);
+
+            String dest = message.getJMSDestination().toString();
+            String topic = dest.replaceFirst(".*://", "");
+            writer.handleEvent(message.getJMSDestination().toString(), event);
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }

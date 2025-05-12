@@ -24,7 +24,7 @@ public class WeatherRepository implements WeatherRepositoryPort {
             ps.setString(6, data.getCityName());
 
             ps.executeUpdate();
-        }catch (Exception e){
+        } catch (Exception e){
             System.out.println("Error" + e.getMessage());
         }
 
