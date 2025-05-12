@@ -8,9 +8,9 @@ import javax.jms.*;
 public class MessagePublisher implements EventPublisher, AutoCloseable {
     private static String BROKER_URL = "tcp://localhost:61616";
     private static String TOPICNAME = "weather.topic";
-    private Connection connection;
-    private Session session;
-    private MessageProducer producer;
+    private final Connection connection;
+    private final Session session;
+    private final MessageProducer producer;
 
     public MessagePublisher() throws JMSException {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(BROKER_URL);

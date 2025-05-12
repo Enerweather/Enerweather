@@ -2,7 +2,6 @@ package org.ulpgc.dacd.application.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ulpgc.dacd.application.port.EventPublisher;
 import org.ulpgc.dacd.application.port.GetERUseCase;
 import org.ulpgc.dacd.application.port.RERepositoryPort;
 import org.ulpgc.dacd.application.port.REFeederInterface;
@@ -12,7 +11,6 @@ import org.ulpgc.dacd.infrastructure.messaging.MessagePublisher;
 import com.google.gson.Gson;
 
 import javax.jms.JMSException;
-import java.io.IOException;
 import java.util.List;
 
 public class REService implements GetERUseCase {

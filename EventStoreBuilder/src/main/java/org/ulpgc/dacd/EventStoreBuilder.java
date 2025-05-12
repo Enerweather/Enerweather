@@ -6,7 +6,6 @@ import org.ulpgc.dacd.store.JsonMessageListener;
 import javax.jms.*;
 
 public class EventStoreBuilder {
-    private Connection connection;
     private Session session;
 
     public void start()  {
@@ -27,7 +26,7 @@ public class EventStoreBuilder {
 
         private void connectToBroker() throws JMSException{
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-            connection = connectionFactory.createConnection();
+            Connection connection = connectionFactory.createConnection();
             connection.setClientID("EventStoreClient");
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 

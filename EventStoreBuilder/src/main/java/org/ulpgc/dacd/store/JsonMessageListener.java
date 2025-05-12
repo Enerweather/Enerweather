@@ -18,8 +18,6 @@ public class JsonMessageListener implements MessageListener {
             String json = ((TextMessage) message).getText();
             JsonObject event = gson.fromJson(json, JsonObject.class);
 
-            String dest = message.getJMSDestination().toString();
-            String topic = dest.replaceFirst(".*://", "");
             writer.handleEvent(message.getJMSDestination().toString(), event);
         } catch (JMSException e) {
             throw new RuntimeException(e);

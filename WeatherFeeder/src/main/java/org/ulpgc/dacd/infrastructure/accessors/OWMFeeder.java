@@ -5,15 +5,13 @@ import org.ulpgc.dacd.application.port.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.net.URL;
 
 public class OWMFeeder implements WeatherFeeder {
-    private String apiKey;
-    private String baseUrl = "https://api.openweathermap.org/data/2.5/";
+    private final String apiKey;
 
     public OWMFeeder(String apiKey) {
         this.apiKey = apiKey;
@@ -22,6 +20,7 @@ public class OWMFeeder implements WeatherFeeder {
     @Override
     public Weather fetchCurrentWeather(String location) throws WeatherFetchException{
         try{
+            String baseUrl = "https://api.openweathermap.org/data/2.5/";
             String urlString = baseUrl + "weather?q=" + URLEncoder.encode(location, "UTF-8") + "&appid=" + apiKey + "&units=metric";
             HttpURLConnection conn = (HttpURLConnection) new URL(urlString).openConnection();
             conn.setRequestMethod("GET");

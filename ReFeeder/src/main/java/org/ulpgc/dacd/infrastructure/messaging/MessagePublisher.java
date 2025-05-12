@@ -27,6 +27,7 @@ public class MessagePublisher implements EventPublisher, AutoCloseable {
         producer.send(message);
         System.out.println("Message sent" + jsonMessage);
     }
+
     public void close() throws JMSException {
         producer.close();
         session.close();
