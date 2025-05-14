@@ -1,11 +1,11 @@
-import org.ulpgc.dacd.application.port.GetWeatherUseCase;
-import org.ulpgc.dacd.application.port.WeatherFeeder;
-import org.ulpgc.dacd.application.port.WeatherRepositoryPort;
-import org.ulpgc.dacd.application.service.WeatherService;
-import org.ulpgc.dacd.domain.model.Weather;
-import org.ulpgc.dacd.infrastructure.accessors.OWMFeeder;
-import org.ulpgc.dacd.infrastructure.persistence.DBInitializer;
-import org.ulpgc.dacd.infrastructure.persistence.WeatherRepository;
+import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.GetWeatherUseCase;
+import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherFeeder;
+import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherRepositoryPort;
+import org.ulpgc.dacd.enerweather.weatherFeeder.application.service.WeatherService;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.accessors.OWMaccessor;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.persistence.DBInitializer;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.persistence.WeatherRepository;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.rest.WeatherController;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public class Main {
 
         DBInitializer.createWeatherTable();
 
-        WeatherFeeder feeder = new OWMFeeder(apiKey);
+        WeatherFeeder feeder = new OWMaccessor(apiKey);
         WeatherRepositoryPort repo = new WeatherRepository();
-        GetWeatherUseCase service = new WeatherService(feeder, repo);
+        GetWeatherUseCase service = new WeatherService(feeder);
 
         List<String> cities = List.of(
                 "Madrid",
@@ -50,18 +50,11 @@ public class Main {
                 "Santa Cruz de Tenerife",
                 "Alcalá de Henares"
         );
-        for (String city : cities) {
-            Weather data = service.execute(city);
-            if (data != null) {
-                System.out.println(
-                        "Weather in " + data.getCityName() + ": " + data.getTemperature());
-            } else {
-                System.out.println("Failed to get data for " + city);
-            }
+        WeatherController controller = new WeatherController(service, repo, cities);
+        controller.startPeriodicTask(3600);
 
         }
 
 
     }
 
-}
