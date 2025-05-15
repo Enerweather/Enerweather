@@ -1,21 +1,18 @@
 package org.ulpgc.dacd.enerweather.reFeeder;
 
-import org.ulpgc.dacd.enerweather.reFeeder.application.port.ReeRepositoryPort;
-import org.ulpgc.dacd.enerweather.reFeeder.application.port.ReeFeederInterface;
-import org.ulpgc.dacd.enerweather.reFeeder.application.service.ReeService;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.accessors.ReeAccessor;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.rest.ReeController;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.persistence.ReeDBInitializer;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.persistence.ReeRepository;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyRepositoryPort;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyFeederInterface;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.EnergyAccessor;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.EnergyDBInitializer;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.EnergyRepository;
 
 public class Main {
     public static void main(String[] args) {
-        ReeDBInitializer.createRETable();
+        EnergyDBInitializer.createRETable();
         String reUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
-        ReeFeederInterface reFeeder = new ReeAccessor(reUrl);
-        ReeRepositoryPort reRepo = new ReeRepository();
-        ReeService service = new ReeService(reFeeder);
-        ReeController controller = new ReeController(service, reRepo);
+        EnergyFeederInterface feeder = new EnergyAccessor(reUrl);
+        EnergyRepositoryPort repository = new EnergyRepository();
+        EnergyController controller = new EnergyController(feeder, repository);
 
         controller.startPeriodicTask(3600);
     }
