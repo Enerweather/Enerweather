@@ -27,18 +27,22 @@ public class WeatherController {
 
     public void execute() {
         for (String city : cities) {
-            Weather data = feeder.fetchCurrentWeather(city);
-            if (data != null) {
-                repository.save(data);
-                try (EventPublisher publisher = new MessagePublisher()) {
-                    String json = new Gson().toJson(data);
-                    publisher.publish(json);
-                    System.out.println("Published: " + json);
-                } catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
+            try {
+                Weather data = feeder.fetchCurrentWeather(city);
+                if (data != null) {
+                    repository.save(data);
+                    try (EventPublisher publisher = new MessagePublisher()) {
+                        String json = new Gson().toJson(data);
+                        publisher.publish(json);
+                        System.out.println("Published: " + json);
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("Data is null");
                 }
-            } else {
-                System.out.println("Data is null");
+            } catch (FetchException e) {
+                System.out.println("Error fetching weather for " + city);
             }
         }
     }
