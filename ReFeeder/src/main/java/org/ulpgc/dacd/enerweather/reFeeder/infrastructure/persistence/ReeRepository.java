@@ -1,7 +1,7 @@
-package org.ulpgc.dacd.infrastructure.persistence;
+package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.persistence;
 
-import org.ulpgc.dacd.application.port.RERepositoryPort;
-import org.ulpgc.dacd.domain.model.RE;
+import org.ulpgc.dacd.enerweather.reFeeder.application.port.ReeRepositoryPort;
+import org.ulpgc.dacd.enerweather.reFeeder.domain.model.RE;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
-public class RERepository implements RERepositoryPort {
+public class ReeRepository implements ReeRepositoryPort {
     @Override
     public void saveAll(List<RE> batch) {
         String sql = """
@@ -48,14 +48,15 @@ public class RERepository implements RERepositoryPort {
             ps.setString(1, indicator);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    RE d = new RE();
-                    d.setIndicator(rs.getString("indicator"));
-                    d.setValue(rs.getDouble("value"));
-                    d.setPercentage(rs.getDouble("percentage"));
-                    d.setUnit(rs.getString("unit"));
-                    d.setTimestamp(rs.getString("timestamp"));
-                    d.setGeoName(rs.getString("geo_name"));
-                    d.setGeoId(rs.getInt("geo_id"));
+                    RE d = new RE(
+                        rs.getString("indicator"),
+                        rs.getDouble("value"),
+                        rs.getDouble("percentage"),
+                        rs.getString("unit"),
+                        rs.getString("timestamp"),
+                        rs.getString("geo_name"),
+                        rs.getInt("geo_id")
+                    );
                     return Optional.of(d);
                 }
             }

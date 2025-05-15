@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.infrastructure.persistence;
+package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.persistence;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;

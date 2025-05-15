@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.domain.model;
+package org.ulpgc.dacd.enerweather.reFeeder.domain.model;
 
 public class RE {
     private String indicator;
