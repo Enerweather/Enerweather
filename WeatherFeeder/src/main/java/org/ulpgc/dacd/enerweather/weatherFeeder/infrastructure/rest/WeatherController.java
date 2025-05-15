@@ -2,11 +2,10 @@ package org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.rest;
 
 import com.google.gson.Gson;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.EventPublisher;
-import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.GetWeatherUseCase;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherRepositoryPort;
+import org.ulpgc.dacd.enerweather.weatherFeeder.application.service.WeatherService;
 import org.ulpgc.dacd.enerweather.weatherFeeder.domain.model.Weather;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.accessors.WeatherFetchException;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.messaging.MessagePublisher;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.persistence.MessagePublisher;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -14,20 +13,20 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class WeatherController {
-    private final GetWeatherUseCase getWeather;
+    private final WeatherService weatherService;
     private final WeatherRepositoryPort repository;
     private final List<String> cities;
 
-    public WeatherController(GetWeatherUseCase getWeather, WeatherRepositoryPort repository, List<String> cities) {
+    public WeatherController(WeatherService getWeather, WeatherRepositoryPort repository, List<String> cities) {
 
-        this.getWeather = getWeather;
+        this.weatherService = getWeather;
         this.repository = repository;
         this.cities = cities;
     }
 
     public void execute() {
         for (String city : cities) {
-            Weather data = getWeather.execute(city);
+            Weather data = weatherService.getWeatherFor(city);
             if (data != null) {
                 repository.save(data);
                 try (EventPublisher publisher = new MessagePublisher()) {

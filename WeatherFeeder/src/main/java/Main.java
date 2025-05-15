@@ -1,8 +1,7 @@
-import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.GetWeatherUseCase;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherFeeder;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherRepositoryPort;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.service.WeatherService;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.accessors.OWMaccessor;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.accessors.accessor;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.persistence.DBInitializer;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.persistence.WeatherRepository;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.rest.WeatherController;
@@ -15,9 +14,9 @@ public class Main {
 
         DBInitializer.createWeatherTable();
 
-        WeatherFeeder feeder = new OWMaccessor(apiKey);
+        WeatherFeeder feeder = new accessor(apiKey);
         WeatherRepositoryPort repo = new WeatherRepository();
-        GetWeatherUseCase service = new WeatherService(feeder);
+        WeatherService service = new WeatherService(feeder);
 
         List<String> cities = List.of(
                 "Madrid",

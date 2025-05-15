@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.messaging;
+package org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.persistence;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.EventPublisher;

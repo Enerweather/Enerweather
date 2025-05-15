@@ -1,15 +1,10 @@
 package org.ulpgc.dacd.enerweather.weatherFeeder.application.service;
 
-import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.EventPublisher;
-import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.GetWeatherUseCase;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherFeeder;
-import org.ulpgc.dacd.enerweather.weatherFeeder.application.port.WeatherRepositoryPort;
 import org.ulpgc.dacd.enerweather.weatherFeeder.domain.model.Weather;
-import com.google.gson.Gson;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.accessors.WeatherFetchException;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.messaging.MessagePublisher;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.accessors.FetchException;
 
-public class WeatherService implements GetWeatherUseCase {
+public class WeatherService {
     private final WeatherFeeder feeder;
 
     public WeatherService(WeatherFeeder feeder) {
@@ -17,11 +12,11 @@ public class WeatherService implements GetWeatherUseCase {
 
     }
 
-    @Override
-    public Weather execute(String city) {
+
+    public Weather getWeatherFor(String city) {
         try {
             return feeder.fetchCurrentWeather(city);
-        } catch (WeatherFetchException e) {
+        } catch (FetchException e) {
             System.out.println("Error fetching weather for " + city);
             return null;
         }
