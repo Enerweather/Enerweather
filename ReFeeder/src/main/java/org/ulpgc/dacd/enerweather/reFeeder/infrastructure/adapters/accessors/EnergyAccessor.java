@@ -97,11 +97,7 @@ public class EnergyAccessor implements EnergyFeederInterface {
             Energy data = new Energy(
                     attrs.get("title").getAsString(),
                     v.get("value").getAsDouble(),
-                    v.get("percentage").getAsDouble(),
-                    v.has("unit") ? v.get("unit").getAsString() : "",
-                    requestStart,
-                    "",
-                    0
+                    requestStart
             );
 
             list.add(data);

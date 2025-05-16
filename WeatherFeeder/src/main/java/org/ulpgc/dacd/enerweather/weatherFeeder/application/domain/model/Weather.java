@@ -1,60 +1,35 @@
 package org.ulpgc.dacd.enerweather.weatherFeeder.application.domain.model;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 public class Weather {
-    private double temperature;
-    private int humidity;
-    private int pressure;
-    private double windSpeed;
-    private String description;
-    private String cityName;
+    private final double windSpeed;
+    private final String description;
+    private final String cityName;
+    private final String date;
 
-    // Getters and setters
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
-
-    public int getHumidity() {
-        return humidity;
-    }
-
-    public void setHumidity(int humidity) {
-        this.humidity = humidity;
-    }
-
-    public int getPressure() {
-        return pressure;
-    }
-
-    public void setPressure(int pressure) {
-        this.pressure = pressure;
+    public Weather(double windSpeed, String description, String cityName) {
+        this.windSpeed = windSpeed;
+        this.description = description;
+        this.cityName = cityName;
+        this.date = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).toString();
     }
 
     public double getWindSpeed() {
         return windSpeed;
     }
 
-    public void setWindSpeed(double windSpeed) {
-        this.windSpeed = windSpeed;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getCityName() {
         return cityName;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public String getDate() {
+        return date;
     }
 }

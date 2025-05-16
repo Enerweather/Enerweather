@@ -7,7 +7,7 @@ import javax.jms.*;
 
 public class MessagePublisher implements EventPublisher, AutoCloseable {
     private static String BROKER_URL = "tcp://localhost:61616";
-    private static String TOPICNAME = "energy.topic";
+    private static String TOPICNAME = "energy";
     private Connection connection;
     private Session session;
     private MessageProducer producer;
@@ -20,6 +20,7 @@ public class MessagePublisher implements EventPublisher, AutoCloseable {
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination destination = session.createTopic(TOPICNAME);
         producer = session.createProducer(destination);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
     }
 
     public void publish(String jsonMessage) throws JMSException {

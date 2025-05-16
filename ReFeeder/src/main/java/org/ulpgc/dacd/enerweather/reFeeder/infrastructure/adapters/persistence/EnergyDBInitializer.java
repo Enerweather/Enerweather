@@ -10,11 +10,7 @@ public class EnergyDBInitializer {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 indicator TEXT,
                 value REAL,
-                percentage REAL,
-                unit TEXT,
-                timestamp TEXT,
-                geo_name TEXT,
-                geo_id INTEGER);
+                timestamp TEXT);
                 """;
         try(Connection conn = DBConnection.connect();
             Statement stmt = conn.createStatement()){

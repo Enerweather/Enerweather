@@ -30,8 +30,8 @@ public class EventStoreBuilder {
             connection.setClientID("EventStoreClient");
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            subscribe("weather.topic");
-            subscribe("energy.topic");
+            subscribe("weather");
+            subscribe("energy");
 
             connection.start();
         }

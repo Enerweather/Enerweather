@@ -14,19 +14,15 @@ public class EnergyRepository implements EnergyRepositoryPort {
     public void saveAll(List<Energy> batch) {
         String sql = """
                 INSERT INTO re_data
-                (indicator, value, percentage, unit, timestamp, geo_name, geo_id)
-                VALUES (?,?,?,?,?,?,?)
+                (indicator, value, timestamp)
+                VALUES (?,?,?)
                 """;
         try (Connection conn = DBConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             for (Energy d : batch) {
                 ps.setString(1, d.getIndicator());
                 ps.setDouble(2, d.getValue());
-                ps.setDouble(3, d.getPercentage());
-                ps.setString(4, d.getUnit());
-                ps.setString(5, d.getTimestamp());
-                ps.setString(6, d.getGeoName());
-                ps.setInt(7, d.getGeoId());
+                ps.setString(3, d.getTimestamp());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -37,7 +33,7 @@ public class EnergyRepository implements EnergyRepositoryPort {
     @Override
     public Optional<Energy> findLatestByIndicator(String indicator) {
         String sql = """
-                SELECT indicator,value,percentage,unit,timestamp,geo_name,geo_id
+                SELECT indicator,value,timestamp
                 FROM re_data
                 WHERE indicator = ?
                 ORDER BY timestamp DESC
@@ -51,11 +47,7 @@ public class EnergyRepository implements EnergyRepositoryPort {
                     Energy d = new Energy(
                         rs.getString("indicator"),
                         rs.getDouble("value"),
-                        rs.getDouble("percentage"),
-                        rs.getString("unit"),
-                        rs.getString("timestamp"),
-                        rs.getString("geo_name"),
-                        rs.getInt("geo_id")
+                        rs.getString("timestamp")
                     );
                     return Optional.of(d);
                 }

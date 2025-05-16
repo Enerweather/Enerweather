@@ -6,8 +6,8 @@ import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.EventPublish
 import javax.jms.*;
 
 public class MessagePublisher implements EventPublisher, AutoCloseable {
-    private static String BROKER_URL = "tcp://localhost:61616";
-    private static String TOPICNAME = "weather.topic";
+    private static final String BROKER_URL = "tcp://localhost:61616";
+    private static final String TOPICNAME = "weather";
     private final Connection connection;
     private final Session session;
     private final MessageProducer producer;
@@ -20,6 +20,7 @@ public class MessagePublisher implements EventPublisher, AutoCloseable {
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination destination = session.createTopic(TOPICNAME);
         producer = session.createProducer(destination);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
     }
 
     public void publish(String jsonMessage) throws JMSException {
