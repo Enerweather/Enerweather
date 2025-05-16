@@ -18,7 +18,7 @@ public class JsonMessageListener implements MessageListener {
             String json = ((TextMessage) message).getText();
             JsonObject event = gson.fromJson(json, JsonObject.class);
 
-            writer.handleEvent(message.getJMSDestination().toString(), event);
+            writer.handleEvent(message.getJMSDestination().toString().substring(8), event);
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }

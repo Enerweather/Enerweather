@@ -18,8 +18,6 @@ public class FileEventWriter {
     private final Path baseDir = Paths.get("eventstore");
 
     public void handleEvent(String topicName, JsonObject event) {
-        topicName = topicName.replaceAll("[^a-zA-Z0-9._-]", "_");
-
         String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         Path dir = baseDir.resolve(topicName);
         Path file = dir.resolve(date + ".events");
