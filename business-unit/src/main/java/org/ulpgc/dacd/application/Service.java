@@ -16,8 +16,8 @@ public class Service {
     }
 
     public CombinedData getCombinedData(String city, String indicator) {
-        WeatherData weather = datamart.getLatestWeatherData(city).orElse(new WeatherData());
-        EnergyData energy = datamart.getLatestEnergy(indicator).orElse(null); // null-check can be added
+        WeatherData weather = datamart.getLatestWeatherData(city).orElse(new WeatherData(0.0, "no data", city));
+        EnergyData energy = datamart.getLatestEnergy(indicator).orElse(new EnergyData(indicator, 0.0, "no data"));
 
         return new CombinedData(weather, energy);
     }

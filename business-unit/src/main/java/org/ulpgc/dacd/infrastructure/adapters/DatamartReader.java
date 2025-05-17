@@ -13,7 +13,7 @@ public class DatamartReader implements DatamartQueryPort {
     @Override
     public Optional<WeatherData> getLatestWeatherData(String city) {
         String query = """
-                SELECT temperature, humidity, pressure, wind_speed, description, city_name
+                SELECT wind_speed, description, city_name
                 FROM weather_data
                 WHERE city_name = ?
                 ORDER BY timestamp DESC
@@ -26,13 +26,10 @@ public class DatamartReader implements DatamartQueryPort {
             stmt.setString(1, city);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                WeatherData data = new WeatherData();
-                data.setTemperature(rs.getDouble("temperature"));
-                data.setHumidity(rs.getInt("humidity"));
-                data.setPressure(rs.getInt("pressure"));
-                data.setWindSpeed(rs.getDouble("wind_speed"));
-                data.setDescription(rs.getString("description"));
-                data.setCityName(rs.getString("city_name"));
+                double windSpeed = rs.getDouble("wind_speed");
+                String description = rs.getString("description");
+                String cityName = rs.getString("city_name");
+                WeatherData data = new WeatherData(windSpeed, description, cityName);
                 return Optional.of(data);
             }
 
@@ -46,7 +43,7 @@ public class DatamartReader implements DatamartQueryPort {
     @Override
     public Optional<EnergyData> getLatestEnergy(String indicator) {
         String query = """
-                SELECT indicator, value, percentage, unit, timestamp, geo_name, geo_id
+                SELECT indicator, value, timestamp
                 FROM re_data
                 WHERE indicator = ?
                 ORDER BY timestamp DESC
@@ -62,11 +59,7 @@ public class DatamartReader implements DatamartQueryPort {
                 return Optional.of(new EnergyData(
                         rs.getString("indicator"),
                         rs.getDouble("value"),
-                        rs.getDouble("percentage"),
-                        rs.getString("unit"),
-                        rs.getString("timestamp"),
-                        rs.getString("geo_name"),
-                        rs.getInt("geo_id")
+                        rs.getString("timestamp")
                 ));
             }
 

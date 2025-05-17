@@ -19,19 +19,26 @@ public class CommandLineInterface {
             String indicator = scanner.nextLine();
 
             CombinedData data = service.getCombinedData(city, indicator);
-            System.out.println(""" 
+            System.out.printf(""" 
                 Ciudad: %s
-                Temperatura: %.2f °C, %s
-                Indicador: %s = %.2f %s (%s)
-                        \\n""\",
+                Viento: %.2f km/h
+                Descripción: %s 
+                Fecha del dato: %s
+                
+                Indicador: %s
+                Valor: %.2f
+                Fecha del dato: %s
+                
+                %n
+                """,
                 data.getWeather().getCityName(),
-                data.getWeather().getTemperature(),
                 data.getWeather().getDescription(),
-                data.getEnergy().getIndicator(),
+                data.getWeather().getWindSpeed(),
+                data.getWeather().getDate(),
                 
                 data.getEnergy().getValue(),
-                data.getEnergy().getUnit(),
-                data.getEnergy().getTimestamp() """
+                data.getEnergy().getIndicator(),
+                data.getEnergy().getTimestamp()
             );
         }
     }
