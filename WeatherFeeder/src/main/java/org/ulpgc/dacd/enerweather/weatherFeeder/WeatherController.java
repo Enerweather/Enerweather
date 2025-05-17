@@ -1,6 +1,8 @@
 package org.ulpgc.dacd.enerweather.weatherFeeder;
 
 import com.google.gson.Gson;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.accessors.Accessor;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.persistence.WeatherRepository;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.EventPublisher;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherFeeder;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherRepositoryPort;
@@ -18,10 +20,10 @@ public class WeatherController {
     private final WeatherRepositoryPort repository;
     private final List<String> cities;
 
-    public WeatherController(WeatherFeeder feeder, WeatherRepositoryPort repository, List<String> cities) {
+    public WeatherController(String apiKey, List<String> cities) {
 
-        this.feeder = feeder;
-        this.repository = repository;
+        this.feeder = new Accessor(apiKey);
+        this.repository = new WeatherRepository();
         this.cities = cities;
     }
 

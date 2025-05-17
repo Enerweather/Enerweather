@@ -1,10 +1,6 @@
 package org.ulpgc.dacd.enerweather.weatherFeeder;
 
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherFeeder;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherRepositoryPort;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.accessors.Accessor;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.persistence.DBInitializer;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.persistence.WeatherRepository;
 
 import java.util.List;
 
@@ -14,8 +10,6 @@ public class Main {
 
         DBInitializer.createWeatherTable();
 
-        WeatherFeeder feeder = new Accessor(apiKey);
-        WeatherRepositoryPort repo = new WeatherRepository();
 
         List<String> cities = List.of(
                 "Madrid",
@@ -48,7 +42,7 @@ public class Main {
                 "Santa Cruz de Tenerife",
                 "Alcalá de Henares"
         );
-        WeatherController controller = new WeatherController(feeder, repo, cities);
+        WeatherController controller = new WeatherController(apiKey, cities);
         controller.startPeriodicTask(3600);
 
         }
