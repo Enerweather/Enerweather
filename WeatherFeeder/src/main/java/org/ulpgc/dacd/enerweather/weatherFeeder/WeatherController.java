@@ -2,6 +2,7 @@ package org.ulpgc.dacd.enerweather.weatherFeeder;
 
 import com.google.gson.Gson;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.accessors.Accessor;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.persistence.DBInitializer;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.persistence.WeatherRepository;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.EventPublisher;
 import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherFeeder;
@@ -20,11 +21,45 @@ public class WeatherController {
     private final WeatherRepositoryPort repository;
     private final List<String> cities;
 
-    public WeatherController(String apiKey, List<String> cities) {
-
+    public WeatherController(String apiKey) {
+        DBInitializer.createWeatherTable();
         this.feeder = new Accessor(apiKey);
         this.repository = new WeatherRepository();
-        this.cities = cities;
+        this.cities = getAllCities();
+    }
+
+    public List<String> getAllCities() {
+        return List.of(
+                "Madrid",
+                "Barcelona",
+                "Valencia",
+                "Seville",
+                "Zaragoza",
+                "Málaga",
+                "Murcia",
+                "Palma",
+                "Las Palmas de Gran Canaria",
+                "Bilbao",
+                "Alicante",
+                "Córdoba",
+                "Valladolid",
+                "Vigo",
+                "Gijón",
+                "Hospitalet de Llobregat",
+                "Vitoria-Gasteiz",
+                "La Coruña",
+                "Granada",
+                "Elche",
+                "Oviedo",
+                "Badalona",
+                "Cartagena",
+                "Terrassa",
+                "Jerez de la Frontera",
+                "Sabadell",
+                "Móstoles",
+                "Santa Cruz de Tenerife",
+                "Alcalá de Henares"
+        );
     }
 
     public void execute() {
