@@ -12,6 +12,7 @@
         <module>ReFeeder</module>
         <module>WeatherFeeder</module>
         <module>EventStoreBuilder</module>
+        <module>business-unit</module>
     </modules>
 
     <properties>
