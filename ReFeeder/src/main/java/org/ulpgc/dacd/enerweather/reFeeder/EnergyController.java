@@ -1,6 +1,8 @@
 package org.ulpgc.dacd.enerweather.reFeeder;
 
 import com.google.gson.Gson;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.EnergyAccessor;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.EnergyRepository;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyFeederInterface;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyRepositoryPort;
 import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
@@ -19,9 +21,9 @@ public class EnergyController {
     private final EnergyRepositoryPort repository;
 
 
-    public EnergyController(EnergyFeederInterface feeder, EnergyRepositoryPort repository) {
-        this.feeder = feeder;
-        this.repository = repository;
+    public EnergyController(String reUrl) {
+        this.feeder = new EnergyAccessor(reUrl);
+        this.repository = new EnergyRepository();
     }
 
     public  void execute() {

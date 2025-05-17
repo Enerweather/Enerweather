@@ -54,6 +54,7 @@ public class EnergyAccessor implements EnergyFeederInterface {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                System.err.println("HTTP error body: " + response.body());
                 throw new EnergyFetchException("Unexpected HTTP status: " + response.statusCode());
             }
 
