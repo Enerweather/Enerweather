@@ -2,6 +2,7 @@ package org.ulpgc.dacd.enerweather.reFeeder;
 
 import com.google.gson.Gson;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.AccessorImp;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.DBInitializer;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.Repository;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.RepositoryPort;
@@ -22,6 +23,7 @@ public class EnergyController {
 
 
     public EnergyController(String reUrl) {
+        DBInitializer.createRETable();
         this.feeder = new AccessorImp(reUrl);
         this.repository = new Repository();
     }

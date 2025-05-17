@@ -3,10 +3,8 @@ import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.D
 
 public class Main {
     public static void main(String[] args) {
-        DBInitializer.createRETable();
         String reUrl = "https://apidatos.ree.es/en/datos/balance/balance-electrico";
         EnergyController controller = new EnergyController(reUrl);
-
         controller.startPeriodicTask(3600);
     }
 }
