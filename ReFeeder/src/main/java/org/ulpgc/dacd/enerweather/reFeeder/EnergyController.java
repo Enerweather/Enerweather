@@ -1,13 +1,13 @@
 package org.ulpgc.dacd.enerweather.reFeeder;
 
 import com.google.gson.Gson;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.EnergyAccessor;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.EnergyRepository;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyFeederInterface;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyRepositoryPort;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.AccessorImp;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.Repository;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.RepositoryPort;
 import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
 
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.EnergyFetchException;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.FetchException;
 import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.MessagePublisher;
 
 import java.util.List;
@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit;
 
 
 public class EnergyController {
-    private final EnergyFeederInterface feeder;
-    private final EnergyRepositoryPort repository;
+    private final Accessor feeder;
+    private final RepositoryPort repository;
 
 
     public EnergyController(String reUrl) {
-        this.feeder = new EnergyAccessor(reUrl);
-        this.repository = new EnergyRepository();
+        this.feeder = new AccessorImp(reUrl);
+        this.repository = new Repository();
     }
 
     public  void execute() {
@@ -42,7 +42,7 @@ public class EnergyController {
                 System.err.println("Error: " + e.getMessage());
             }
 
-        } catch (EnergyFetchException e) {
+        } catch (FetchException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }

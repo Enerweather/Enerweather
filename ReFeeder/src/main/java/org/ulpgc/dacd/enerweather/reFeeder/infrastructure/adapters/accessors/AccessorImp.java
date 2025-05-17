@@ -1,6 +1,5 @@
 package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors;
 
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyFeederInterface;
 import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,22 +18,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnergyAccessor implements EnergyFeederInterface {
+public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor {
     private final String baseUrl;
     private final HttpClient httpClient;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-    public EnergyAccessor(String baseUrl) {
+    public AccessorImp(String baseUrl) {
         this(baseUrl, HttpClient.newHttpClient());
     }
 
-    public EnergyAccessor(String baseUrl, HttpClient httpClient) {
+    public AccessorImp(String baseUrl, HttpClient httpClient) {
         this.baseUrl = baseUrl;
         this.httpClient = httpClient;
     }
 
     @Override
-    public List<Energy> fetchEnergyData() throws EnergyFetchException {
+    public List<Energy> fetchEnergyData() throws FetchException {
         try {
             LocalDate queryDate = LocalDate.now().minusDays(4);
             String start = queryDate.atStartOfDay().format(formatter);
@@ -55,7 +54,7 @@ public class EnergyAccessor implements EnergyFeederInterface {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
                 System.err.println("HTTP error body: " + response.body());
-                throw new EnergyFetchException("Unexpected HTTP status: " + response.statusCode());
+                throw new FetchException("Unexpected HTTP status: " + response.statusCode());
             }
 
             JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
@@ -63,14 +62,14 @@ public class EnergyAccessor implements EnergyFeederInterface {
 
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new EnergyFetchException("Failed to fetch energy data", e);
+            throw new FetchException("Failed to fetch energy data", e);
         }
     }
 
-    private List<Energy> parseRenovables(JsonObject root, String requestStart) throws EnergyFetchException {
+    private List<Energy> parseRenovables(JsonObject root, String requestStart) throws FetchException {
         JsonArray included = root.getAsJsonArray("included");
         if (included == null) {
-            throw new EnergyFetchException("No 'included' array in response");
+            throw new FetchException("No 'included' array in response");
         }
 
         JsonObject renovGroup = null;
@@ -82,7 +81,7 @@ public class EnergyAccessor implements EnergyFeederInterface {
             }
         }
         if (renovGroup == null) {
-            throw new EnergyFetchException("No 'Renovable' group found");
+            throw new FetchException("No 'Renovable' group found");
         }
 
         JsonArray content = renovGroup.getAsJsonObject("attributes").getAsJsonArray("content");

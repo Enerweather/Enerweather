@@ -3,7 +3,7 @@ package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence;
 import java.sql.Connection;
 import java.sql.Statement;
 
-public class EnergyDBInitializer {
+public class DBInitializer {
     public static void createRETable (){
         String sql = """
                 CREATE TABLE IF NOT EXISTS re_data (

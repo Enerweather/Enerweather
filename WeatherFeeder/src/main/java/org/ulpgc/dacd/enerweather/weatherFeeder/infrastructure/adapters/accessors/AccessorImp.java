@@ -1,7 +1,6 @@
 package org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.accessors;
 
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.domain.model.Weather;
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherFeeder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -9,13 +8,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Date;
 
-public class Accessor implements WeatherFeeder {
+public class AccessorImp implements org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.Accessor {
     private final String apiKey;
 
-    public Accessor(String apiKey) {
+    public AccessorImp(String apiKey) {
         this.apiKey = apiKey;
     }
 

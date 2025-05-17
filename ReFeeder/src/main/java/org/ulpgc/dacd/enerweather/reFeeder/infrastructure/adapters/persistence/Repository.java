@@ -1,6 +1,6 @@
 package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence;
 
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EnergyRepositoryPort;
+import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.RepositoryPort;
 import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
 
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
-public class EnergyRepository implements EnergyRepositoryPort {
+public class Repository implements RepositoryPort {
     @Override
     public void saveAll(List<Energy> batch) {
         String sql = """

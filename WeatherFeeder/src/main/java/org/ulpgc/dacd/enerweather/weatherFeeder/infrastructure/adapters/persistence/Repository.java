@@ -1,15 +1,14 @@
 package org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.adapters.persistence;
 
-import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.WeatherRepositoryPort;
+import org.ulpgc.dacd.enerweather.weatherFeeder.infrastructure.port.RepositoryPort;
 import org.ulpgc.dacd.enerweather.weatherFeeder.application.domain.model.Weather;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class WeatherRepository implements WeatherRepositoryPort {
+public class Repository implements RepositoryPort {
     @Override
     public void save(Weather data){
         String sql = "INSERT INTO weather_data (wind_speed, description, city_name, timestamp)" +

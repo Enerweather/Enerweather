@@ -3,7 +3,7 @@ package org.ulpgc.dacd.enerweather.weatherFeeder;
 public class Main {
     public static void main(String[] args) {
         String apiKey = args[0];
-        WeatherController controller = new WeatherController(apiKey);
+        Controller controller = new Controller(apiKey);
         controller.startPeriodicTask(3600);
         }
     }

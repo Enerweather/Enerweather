@@ -5,7 +5,7 @@ import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
 import java.util.List;
 import java.util.Optional;
 
-public interface EnergyRepositoryPort {
+public interface RepositoryPort {
     void saveAll(List<Energy> batch);
     Optional<Energy> findLatestByIndicator(String indicator);
 }
