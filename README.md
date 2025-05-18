@@ -1,4 +1,3 @@
-```markdown
 # 🌤️ Enerweather
 
 Enerweather is a Java-based application that collects, processes, and stores both renewable energy and weather data for analysis of energy production patterns in relation to weather conditions in Spain.
@@ -11,16 +10,6 @@ To analyze the relationship between weather (cloudiness and wind speed) and rene
 
 ---
 
-## Value Proposition
-
-Enerweather provides:
-
-- Insight into how **weather conditions** affect **energy production**.
-- Per-city estimations of solar and wind energy production based on **population-adjusted distribution**.
-- A clean, event-driven architecture for scalable, real-time analytics.
-
----
-
 ## System Architecture
 
 The architecture follows clean modular principles and is inspired by the Lambda pattern. It consists of:
@@ -30,7 +19,7 @@ The architecture follows clean modular principles and is inspired by the Lambda 
 - **EventStoreBuilder** – Subscribes to both topics and stores `.events` files by date.
 - **BusinessUnit** – Consumes historical and real-time events to generate insights and store them in a datamart.
 
-> [Final Architecture Diagram](docs/final.png)
+> [Final Architecture Diagram](images/Arquitectura.jpg)
 
 ---
 
@@ -52,11 +41,9 @@ The architecture follows clean modular principles and is inspired by the Lambda 
 
 - Subscribes to both `weather` and `energy`.
 - Saves events as JSON lines in `.events` files:
-```
 
 eventstore/{topic}/{source}/{YYYYMMDD}.events
 
-````
 
 ### BusinessUnit
 
@@ -68,20 +55,21 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 
 ## Class Diagrams
 
-```markdown
+
 ### EventStoreBuilder
-![Event Store Builder Diagram](docs/builder.png)
-````
-```markdown
+![Event Store Builder Diagram](images/EventStoreBuilder.jpg)
+
+
 ### WeatherFeeder
-![Weather Feeder Diagram](docs/WeatherFeeder.png)
-````
-```markdown
+![Weather Feeder Diagram](images/WeatherFeeder.png)
+
+
 ### EnergyFeeder
-![Energy Feeder Diagram](docs/EnergyFeeder.png)
-````
+![Energy Feeder Diagram](images/EnergyFeeder.png)
 
 
+### BusinessUnit
+![Business Unit Diagram](images/BusinessUnit.jpg)
 ---
 
 ## Technologies Used
@@ -106,55 +94,30 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 ### Setup
 
 ```bash
-git clone https://github.com/your-org/enerweather.git
-cd enerweather
-mvn clean package
+git clone https://github.com/enerweather/enerweather.git
 ```
 
 ### Run ActiveMQ
-
 ```bash
 # From ActiveMQ installation
 ./bin/activemq start
 ```
 
----
+### Run modules
+Run each individual module, first EventStoreBuilder, then both feeders, and finally the BusinessUnit
 
-## Running Modules
+### Interact with the console
+Use the menu options to interact with the data:
+- View Data: Browse and view data stored in the datamart
+- Rebuild Datamart: Rebuild the datamart from the eventstore
+- Quit: Exit the application
 
-Each module is packaged independently:
 
-```bash
-# Start feeders (in separate terminals)
-java -jar weather-feeder.jar
-java -jar energy-feeder.jar
+When viewing data:
 
-# Start event store builder
-java -jar event-store-builder.jar
-
-# Run analysis
-java -jar business-unit.jar
-```
-
----
-
-## Output Example
-
-After running, BusinessUnit will generate a CSV:
-
-```
-datamart/energy_distribution.csv
-```
-
-Example contents:
-
-```csv
-City,Population,Solar(MW),Wind(MW)
-Madrid,3416771,150.73,320.45
-Barcelona,1702547,75.34,160.05
-Valencia,825948,36.55,77.68
-...
-```
+- First select a data type (weather or energy)
+- Then select a date to view data from
+- Apply filters if needed
 
 ---
 
