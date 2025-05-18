@@ -11,7 +11,7 @@ import javax.jms.TextMessage;
 public class JsonMessageListener implements MessageListener {
     private final Gson gson = new Gson();
     private final FileEventWriter writer = new FileEventWriter();
-
+    @Override
     public void onMessage(Message message) {
         try {
             if (!(message instanceof TextMessage)) return;

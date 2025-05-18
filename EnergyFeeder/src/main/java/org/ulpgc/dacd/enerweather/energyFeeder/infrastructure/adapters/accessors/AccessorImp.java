@@ -34,7 +34,7 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.energyFeeder.infr
     @Override
     public List<Energy> fetchEnergyData() throws FetchException {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDate queryDate = LocalDate.now().minusDays(4);
             String start = queryDate.atStartOfDay().format(formatter);
             String end = queryDate.atTime(23, 59, 59).format(formatter);
