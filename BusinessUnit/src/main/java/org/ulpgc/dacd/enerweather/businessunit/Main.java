@@ -1,7 +1,5 @@
 package org.ulpgc.dacd.enerweather.businessunit;
 
-import javax.jms.TopicSubscriber;
-
 public class Main {
     public static void main(String[] args) {
         Controller controller = new Controller();

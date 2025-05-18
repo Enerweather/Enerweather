@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.businessunit;
+package org.ulpgc.dacd.enerweather.businessunit.domain;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

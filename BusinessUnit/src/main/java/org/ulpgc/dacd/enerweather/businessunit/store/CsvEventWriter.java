@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.businessunit;
+package org.ulpgc.dacd.enerweather.businessunit.store;
 
 import com.google.gson.JsonObject;
 import org.apache.commons.csv.CSVFormat;
