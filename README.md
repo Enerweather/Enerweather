@@ -19,7 +19,7 @@ The architecture follows clean modular principles and is inspired by the Lambda 
 - **EventStoreBuilder** – Subscribes to both topics and stores `.events` files by date.
 - **BusinessUnit** – Consumes historical and real-time events to generate insights and store them in a datamart.
 
-> [Final Architecture Diagram](images/Arquitectura.jpg)
+![Final Architecture Diagram](images/Arquitectura.jpg)
 
 ---
 
