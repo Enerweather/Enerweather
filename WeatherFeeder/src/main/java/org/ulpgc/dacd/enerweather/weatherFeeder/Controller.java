@@ -84,8 +84,8 @@ public class Controller {
         }
     }
 
-    public void startPeriodicTask(long intervalSeconds) {
+    public void startPeriodicTask(long intervalInSeconds) {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::execute, 0, intervalSeconds, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::execute, 0, intervalInSeconds, TimeUnit.SECONDS);
     }
 }

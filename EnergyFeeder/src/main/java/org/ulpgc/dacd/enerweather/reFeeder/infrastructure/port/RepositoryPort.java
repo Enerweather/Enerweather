@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface RepositoryPort {
     void saveAll(List<Energy> batch);
-    Optional<Energy> findLatestByIndicator(String indicator);
+    Optional<Energy> findLatest(String indicator);
 }

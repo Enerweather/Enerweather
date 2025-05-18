@@ -21,7 +21,6 @@ import java.util.List;
 public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor {
     private final String baseUrl;
     private final HttpClient httpClient;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     public AccessorImp(String baseUrl) {
         this(baseUrl, HttpClient.newHttpClient());
@@ -35,6 +34,7 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastr
     @Override
     public List<Energy> fetchEnergyData() throws FetchException {
         try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
             LocalDate queryDate = LocalDate.now().minusDays(4);
             String start = queryDate.atStartOfDay().format(formatter);
             String end = queryDate.atTime(23, 59, 59).format(formatter);

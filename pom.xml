@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>ReFeeder</module>
+        <module>EnergyFeeder</module>
         <module>WeatherFeeder</module>
         <module>EventStoreBuilder</module>
     </modules>

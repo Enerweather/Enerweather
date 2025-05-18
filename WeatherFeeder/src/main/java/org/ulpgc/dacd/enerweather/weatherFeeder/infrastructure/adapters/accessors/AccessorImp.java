@@ -30,7 +30,6 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.weatherFeeder.inf
                     .parseReader(new InputStreamReader(conn.getInputStream()))
                     .getAsJsonObject();
 
-            JsonObject main = json.getAsJsonObject("main");
             JsonObject wind = json.getAsJsonObject("wind");
             JsonObject weather = json.getAsJsonArray("weather").get(0).getAsJsonObject();
 

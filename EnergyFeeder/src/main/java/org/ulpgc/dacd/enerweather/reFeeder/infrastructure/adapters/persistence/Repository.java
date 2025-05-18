@@ -31,7 +31,7 @@ public class Repository implements RepositoryPort {
         }
     }
     @Override
-    public Optional<Energy> findLatestByIndicator(String indicator) {
+    public Optional<Energy> findLatest(String indicator) {
         String sql = """
                 SELECT indicator,value,timestamp
                 FROM re_data

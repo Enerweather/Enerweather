@@ -6,14 +6,14 @@ import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EventPublisher;
 import javax.jms.*;
 
 public class MessagePublisher implements EventPublisher, AutoCloseable {
-    private static String BROKER_URL = "tcp://localhost:61616";
-    private static String TOPICNAME = "energy";
-    private Connection connection;
-    private Session session;
-    private MessageProducer producer;
+    private static final String BROKERURL = "tcp://localhost:61616";
+    private static final String TOPICNAME = "energy";
+    private final Connection connection;
+    private final Session session;
+    private final MessageProducer producer;
 
     public MessagePublisher() throws JMSException {
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(BROKER_URL);
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(BROKERURL);
         connection = connectionFactory.createConnection();
         connection.start();
 

@@ -17,18 +17,18 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
-public class EnergyController {
+public class Controller {
     private final Accessor feeder;
     private final RepositoryPort repository;
 
 
-    public EnergyController(String reUrl) {
-        DBInitializer.createRETable();
-        this.feeder = new AccessorImp(reUrl);
+    public Controller(String url) {
+        DBInitializer.createEnergyTable();
+        this.feeder = new AccessorImp(url);
         this.repository = new Repository();
     }
 
-    public  void execute() {
+    public void execute() {
         try {
             List<Energy> dataList = feeder.fetchEnergyData();
             repository.saveAll(dataList);
@@ -48,9 +48,9 @@ public class EnergyController {
             System.err.println("Error: " + e.getMessage());
         }
     }
-    public void startPeriodicTask(long intervalSeconds) {
+    public void startPeriodicTask(long intervalInSeconds) {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::execute, 0, intervalSeconds, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::execute, 0, intervalInSeconds, TimeUnit.SECONDS);
 
     }
 }
