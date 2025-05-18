@@ -1,7 +1,7 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.persistence;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.EventPublisher;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port.EventPublisher;
 
 import javax.jms.*;
 

@@ -1,6 +1,6 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.accessors;
 
-import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
+import org.ulpgc.dacd.enerweather.energyFeeder.application.domain.model.Energy;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor {
+public class AccessorImp implements org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port.Accessor {
     private final String baseUrl;
     private final HttpClient httpClient;
 

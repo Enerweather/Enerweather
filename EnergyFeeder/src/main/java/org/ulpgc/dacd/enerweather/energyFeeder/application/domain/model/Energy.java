@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.reFeeder.application.domain.model;
+package org.ulpgc.dacd.enerweather.energyFeeder.application.domain.model;
 
 public class Energy {
     private final String indicator;

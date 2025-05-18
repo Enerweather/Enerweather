@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.reFeeder;
+package org.ulpgc.dacd.enerweather.energyFeeder;
 
 public class Main {
     public static void main(String[] args) {
