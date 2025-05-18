@@ -45,7 +45,6 @@ public class Controller {
                 "Valladolid",
                 "Vigo",
                 "Gijón",
-                "Hospitalet de Llobregat",
                 "Vitoria-Gasteiz",
                 "La Coruña",
                 "Granada",

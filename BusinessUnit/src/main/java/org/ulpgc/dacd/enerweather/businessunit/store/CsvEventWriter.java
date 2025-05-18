@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class CsvEventWriter {
-    private static final Logger log = LoggerFactory.getLogger(CsvEventWriter.class);
 
     private final Path baseDir = Paths.get("datamart");
 
@@ -42,7 +41,6 @@ public class CsvEventWriter {
             headers = event.keySet().toArray(String[]::new);
         }
 
-        // 4) write or append
         boolean writeHeader = !Files.exists(csvFile);
         try (FileWriter fw = new FileWriter(csvFile.toFile(), true);
              CSVPrinter printer = new CSVPrinter(fw,

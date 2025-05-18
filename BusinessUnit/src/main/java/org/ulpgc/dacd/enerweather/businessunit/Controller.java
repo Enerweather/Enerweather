@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.ulpgc.dacd.enerweather.businessunit.store.CsvEventWriter;
 import org.ulpgc.dacd.enerweather.businessunit.store.JsonMessageListener;
+import org.ulpgc.dacd.enerweather.businessunit.view.TableView;
 
 import javax.jms.*;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 public class Controller {
@@ -23,12 +25,14 @@ public class Controller {
 
     private Connection connection;
     private Session session;
+    private final TableView tableView = new TableView();
 
     public void start() {
         try {
             rebuildDatamart();
             connectToBroker();
             System.out.println("BusinessUnit connected and listening on topics.");
+            startCommandLoop();
         } catch (JMSException e) {
             System.err.println("Initial connection failed: " + e.getMessage());
             retryOnce();
@@ -42,8 +46,54 @@ public class Controller {
             Thread.sleep(3000);
             connectToBroker();
             System.out.println("Reconnected successfully.");
+            startCommandLoop();
         } catch (Exception ex) {
             System.err.println("Retry failed: " + ex.getMessage());
+        }
+    }
+
+    private void startCommandLoop() {
+        Thread commandThread = new Thread(() -> {
+            Scanner scanner = new Scanner(System.in);
+            boolean running = true;
+
+            while (running) {
+                displayMenu();
+                String command = scanner.nextLine().trim();
+
+                switch (command) {
+                    case "1" -> tableView.displayAvailableData();
+                    case "2" -> rebuildDatamartAndNotify();
+                    case "q", "Q", "exit", "quit" -> {
+                        running = false;
+                        stop();
+                        System.out.println("Exiting...");
+                        System.exit(0);
+                    }
+                    default -> System.out.println("Unknown command. Please try again.");
+                }
+            }
+        });
+
+        commandThread.setDaemon(true);
+        commandThread.start();
+    }
+
+    private void displayMenu() {
+        System.out.println("\n=== Enerweather BusinessUnit ===");
+        System.out.println("1. View Data");
+        System.out.println("2. Rebuild Datamart");
+        System.out.println("q. Quit");
+        System.out.print("\nSelect an option: ");
+    }
+
+    private void rebuildDatamartAndNotify() {
+        try {
+            System.out.println("Rebuilding datamart...");
+            rebuildDatamart();
+            System.out.println("Datamart rebuilt successfully.");
+        } catch (IOException e) {
+            System.err.println("Failed to rebuild datamart: " + e.getMessage());
         }
     }
 
@@ -71,7 +121,6 @@ public class Controller {
                 for (Path topicDir : topics) {
                     String topic = topicDir.getFileName().toString();
                     try (DirectoryStream<Path> days = Files.newDirectoryStream(topicDir, "*.events")) {
-                        System.out.println("I alte leaog there");
                         for (Path eventsFile : days) {
                             Files.lines(eventsFile).forEach(line -> {
                                 JsonObject evt = gson.fromJson(line, JsonObject.class);
@@ -100,7 +149,6 @@ public class Controller {
         Topic topic = session.createTopic(topicName);
         MessageConsumer consumer = session.createDurableSubscriber(topic, topicName);
         consumer.setMessageListener(new JsonMessageListener());
-
     }
 
     public void stop() {
