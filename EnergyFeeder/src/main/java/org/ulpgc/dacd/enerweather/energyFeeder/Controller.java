@@ -1,15 +1,15 @@
-package org.ulpgc.dacd.enerweather.reFeeder;
+package org.ulpgc.dacd.enerweather.energyFeeder;
 
 import com.google.gson.Gson;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.AccessorImp;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.DBInitializer;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.Repository;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.RepositoryPort;
-import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.accessors.AccessorImp;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.persistence.DBInitializer;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.persistence.Repository;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port.Accessor;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port.RepositoryPort;
+import org.ulpgc.dacd.enerweather.energyFeeder.application.domain.model.Energy;
 
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors.FetchException;
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence.MessagePublisher;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.accessors.FetchException;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.persistence.MessagePublisher;
 
 import java.util.List;
 import java.util.concurrent.Executors;

@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.persistence;
 
 import java.sql.Connection;
 import java.sql.Statement;

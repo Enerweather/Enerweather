@@ -1,6 +1,6 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.accessors;
 
-import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
+import org.ulpgc.dacd.enerweather.energyFeeder.application.domain.model.Energy;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.Accessor {
+public class AccessorImp implements org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port.Accessor {
     private final String baseUrl;
     private final HttpClient httpClient;
 
@@ -34,7 +34,7 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastr
     @Override
     public List<Energy> fetchEnergyData() throws FetchException {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDate queryDate = LocalDate.now().minusDays(4);
             String start = queryDate.atStartOfDay().format(formatter);
             String end = queryDate.atTime(23, 59, 59).format(formatter);
@@ -84,11 +84,18 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.reFeeder.infrastr
             throw new FetchException("No 'Renovable' group found");
         }
 
-        JsonArray content = renovGroup.getAsJsonObject("attributes").getAsJsonArray("content");
+        JsonArray content = renovGroup.
+                getAsJsonObject("attributes").
+                getAsJsonArray("content");
         List<Energy> list = new ArrayList<>();
+
 
         for (JsonElement ce : content) {
             JsonObject item = ce.getAsJsonObject();
+            String type = item.get("type").getAsString();
+            // 3) Only accept Wind or Solar photovoltaic
+            if (!(type.equals("Wind") || type.equals("Solar photovoltaic"))) continue;
+
             JsonObject attrs = item.getAsJsonObject("attributes");
             JsonArray  valuesArr = attrs.getAsJsonArray("values");
             if (valuesArr == null || valuesArr.isEmpty()) continue;

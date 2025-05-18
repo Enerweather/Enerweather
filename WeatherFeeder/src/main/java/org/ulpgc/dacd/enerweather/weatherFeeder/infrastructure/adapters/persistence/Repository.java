@@ -19,7 +19,7 @@ public class Repository implements RepositoryPort {
             ps.setDouble(1, data.getWindSpeed());
             ps.setString(2, data.getDescription());
             ps.setString(3, data.getCityName());
-            ps.setString(4, data.getDate());
+            ps.setString(4, data.getTimestamp());
 
             ps.executeUpdate();
         } catch (Exception e){

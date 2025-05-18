@@ -1,7 +1,7 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.persistence;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.persistence;
 
-import org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port.RepositoryPort;
-import org.ulpgc.dacd.enerweather.reFeeder.application.domain.model.Energy;
+import org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port.RepositoryPort;
+import org.ulpgc.dacd.enerweather.energyFeeder.application.domain.model.Energy;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

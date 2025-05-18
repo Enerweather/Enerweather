@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.port;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.port;
 
 import javax.jms.JMSException;
 

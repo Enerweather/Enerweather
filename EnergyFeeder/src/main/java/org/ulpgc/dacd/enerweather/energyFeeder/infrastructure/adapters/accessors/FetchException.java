@@ -1,4 +1,4 @@
-package org.ulpgc.dacd.enerweather.reFeeder.infrastructure.adapters.accessors;
+package org.ulpgc.dacd.enerweather.energyFeeder.infrastructure.adapters.accessors;
 
 public class FetchException extends Exception {
     public FetchException(String message) {

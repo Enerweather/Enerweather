@@ -9,11 +9,11 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 public class JsonMessageListener implements MessageListener {
-    private final Gson gson = new Gson();
     private final FileEventWriter writer = new FileEventWriter();
-
+    @Override
     public void onMessage(Message message) {
         try {
+            Gson gson = new Gson();
             if (!(message instanceof TextMessage)) return;
             String json = ((TextMessage) message).getText();
             JsonObject event = gson.fromJson(json, JsonObject.class);
