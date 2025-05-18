@@ -49,7 +49,6 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 
 - Subscribes to real-time and reads from `eventstore/`.
 - Builds a datamart as CSV files.
-- Generates per-city energy distribution based on population.
 
 ---
 
