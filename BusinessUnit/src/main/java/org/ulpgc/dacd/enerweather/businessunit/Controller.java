@@ -13,6 +13,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -33,7 +35,7 @@ public class Controller {
 
     public void start() {
         try {
-            rebuildDatamart();
+            updateDatamart();
             connectToBroker();
             System.out.println("BusinessUnit connected and listening on topics.");
             startCommandLoop();
@@ -136,6 +138,42 @@ public class Controller {
             }
         }
     }
+
+    private void updateDatamart() throws IOException {
+        CsvEventWriter writer = new CsvEventWriter();
+        Gson gson = new Gson();
+
+        if(!Files.exists(DATAMART_ROOT)) {
+            Files.createDirectories(DATAMART_ROOT);
+        }
+
+        if (Files.exists(EVENTSTORE_ROOT)) {
+            try (DirectoryStream<Path> topics = Files.newDirectoryStream(EVENTSTORE_ROOT)) {
+                for (Path topicDir : topics) {
+                    String topic = topicDir.getFileName().toString();
+                    try (DirectoryStream<Path> days = Files.newDirectoryStream(topicDir, "*.events")) {
+                        for (Path eventsFile : days) {
+                            String timestamp = Files.lines(eventsFile).findFirst()
+                                    .map(line -> gson.fromJson(line, JsonObject.class)
+                                            .get("timestamp").getAsString())
+                                    .orElseThrow();
+                            String date = LocalDate.parse(timestamp.substring(0,10))
+                                    .format(DateTimeFormatter.BASIC_ISO_DATE);
+                            Path csvFile = DATAMART_ROOT.resolve(topic).resolve(date + ".csv");
+                            if (Files.exists(csvFile)) {
+                                continue;
+                            }
+                            Files.lines(eventsFile).forEach(line -> {
+                                JsonObject evt = gson.fromJson(line, JsonObject.class);
+                                writer.handleEvent(topic, evt);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private void connectToBroker() throws JMSException {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(BROKER_URL);
