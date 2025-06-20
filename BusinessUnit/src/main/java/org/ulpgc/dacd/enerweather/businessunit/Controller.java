@@ -14,11 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-import static java.util.Map.entry;
 
 
 public class Controller {
@@ -31,36 +29,6 @@ public class Controller {
     private Session session;
     private final TableView tableView = new TableView();
 
-    private static final Map<String, Integer> CITY_POPULATIONS = Map.ofEntries(
-            entry("Madrid", 3422416),
-            entry("Barcelona", 1686208),
-            entry("Valencia", 824340),
-            entry("Seville", 686741),
-            entry("Zaragoza", 691037),
-            entry("Málaga", 592346),
-            entry("Murcia", 471982),
-            entry("Palma", 438234),
-            entry("Las Palmas de Gran Canaria", 383516),
-            entry("Bilbao", 350000),
-            entry("Alicante", 358608),
-            entry("Córdoba", 326039),
-            entry("Valladolid", 299265),
-            entry("Vigo", 296692),
-            entry("Gijón", 271717),
-            entry("Vitoria-Gasteiz", 253996),
-            entry("La Coruña", 247604),
-            entry("Granada", 233648),
-            entry("Elche", 234765),
-            entry("Oviedo", 219910),
-            entry("Badalona", 223166),
-            entry("Cartagena", 216108),
-            entry("Terrassa", 223627),
-            entry("Jerez de la Frontera", 213105),
-            entry("Sabadell", 216520),
-            entry("Móstoles", 210309),
-            entry("Santa Cruz de Tenerife", 209194),
-            entry("Alcalá de Henares", 197562)
-    );
 
 
     public void start() {
