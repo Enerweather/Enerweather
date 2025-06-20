@@ -66,29 +66,58 @@ public class CsvEventWriter {
             return;
         }
 
-        String[] headers;
+
         if ("weather".equals(topicName)) {
-            headers = new String[]{"timestamp","cityName","description","windSpeed"};
-        } else if ("energy".equals(topicName)) {
-            headers = new String[]{"timestamp","indicator","value"};
-        } else {
-            headers = event.keySet().toArray(String[]::new);
+            String[] headers = {"timestamp", "cityName", "description", "windSpeed"};
+
+            boolean writeHeader = !Files.exists(csvFile);
+            try (FileWriter fw = new FileWriter(csvFile.toFile(), true);
+                 CSVPrinter printer = new CSVPrinter(fw,
+                         CSVFormat.DEFAULT
+                                 .withHeader(headers)
+                                 .withSkipHeaderRecord(!writeHeader))) {
+
+                Object[] vals = new Object[headers.length];
+                for (int i = 0; i < headers.length; i++) {
+                    vals[i] = event.get(headers[i]).getAsString();
+                }
+                printer.printRecord(vals);
+            } catch (IOException e) {
+                System.out.println("Error writing to weather file");
+            }
         }
 
-        boolean writeHeader = !Files.exists(csvFile);
-        try (FileWriter fw = new FileWriter(csvFile.toFile(), true);
-             CSVPrinter printer = new CSVPrinter(fw,
-                     CSVFormat.DEFAULT
-                             .withHeader(headers)
-                             .withSkipHeaderRecord(!writeHeader)))
-        {
-            Object[] vals = new Object[headers.length];
-            for (int i = 0; i < headers.length; i++) {
-                vals[i] = event.get(headers[i]).getAsString();
+        else if ("energy".equals(topicName)) {
+            String[] headers = {"timestamp", "city", "indicator", "value"};
+
+            double totalEnergy = Double.parseDouble(event.get("value").getAsString());
+            String indicator = event.get("indicator").getAsString();
+
+            int totalPop = CITY_POPULATIONS.values().stream().mapToInt(Integer::intValue).sum();
+
+            boolean writeHeader = !Files.exists(csvFile);
+            try (FileWriter fw = new FileWriter(csvFile.toFile(), true);
+                 CSVPrinter printer = new CSVPrinter(fw,
+                         CSVFormat.DEFAULT
+                                 .withHeader(headers)
+                                 .withSkipHeaderRecord(!writeHeader))) {
+
+                for (Map.Entry<String, Integer> entry : CITY_POPULATIONS.entrySet()) {
+                    String city = entry.getKey();
+                    int pop = entry.getValue();
+                    double share = (pop * totalEnergy) / totalPop;
+
+                    printer.printRecord(
+                            timestamp,
+                            city,
+                            indicator,
+                            String.format("%.2f", share)
+                    );
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error writing to energy file: " + e.getMessage());
             }
-            printer.printRecord(vals);
-        } catch (IOException e) {
-            System.out.println("Error writing to file");
         }
     }
 }
