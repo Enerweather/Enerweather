@@ -7,6 +7,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JsonMessageListener implements MessageListener {
     private final CsvEventWriter writer = new CsvEventWriter();
@@ -22,7 +25,11 @@ public class JsonMessageListener implements MessageListener {
             String fullDest = message.getJMSDestination().toString();
             String topicName = fullDest.substring(fullDest.indexOf("://") + 3);
 
-            writer.handleEvent(topicName, event);
+            String timestamp = event.get("timestamp").getAsString();
+            Path csvFile = Paths.get("datamart").resolve(topicName).resolve(timestamp + ".csv");
+            if (!Files.exists(csvFile)) {
+                writer.handleEvent(topicName, event);
+            }
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }
