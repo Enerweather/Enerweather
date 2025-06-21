@@ -7,6 +7,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JsonMessageListener implements MessageListener {
     private final FileEventWriter writer = new FileEventWriter();
@@ -17,8 +20,13 @@ public class JsonMessageListener implements MessageListener {
             if (!(message instanceof TextMessage)) return;
             String json = ((TextMessage) message).getText();
             JsonObject event = gson.fromJson(json, JsonObject.class);
+            String topicName = message.getJMSDestination().toString().substring(8);
 
-            writer.handleEvent(message.getJMSDestination().toString().substring(8), event);
+            String timestamp = event.get("timestamp").getAsString();
+            Path csvFile = Paths.get("datamart").resolve(topicName).resolve(timestamp + ".csv");
+            if (!Files.exists(csvFile)) {
+                writer.handleEvent(topicName, event);
+            }
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }
