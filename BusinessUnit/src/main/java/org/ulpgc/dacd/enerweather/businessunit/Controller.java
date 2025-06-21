@@ -3,6 +3,7 @@ package org.ulpgc.dacd.enerweather.businessunit;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.ulpgc.dacd.enerweather.businessunit.recommendations.Recommendator;
 import org.ulpgc.dacd.enerweather.businessunit.store.CsvEventWriter;
 import org.ulpgc.dacd.enerweather.businessunit.store.JsonMessageListener;
 import org.ulpgc.dacd.enerweather.businessunit.view.TableView;
@@ -27,11 +28,12 @@ public class Controller {
     private static final Path EVENTSTORE_ROOT = Paths.get("eventstore");
     private static final Path DATAMART_ROOT = Paths.get("datamart");
 
+
     private boolean repeatedLine = false;
     private Connection connection;
     private Session session;
     private final TableView tableView = new TableView();
-
+    private final Recommendator recommendator = new Recommendator();
 
 
     public void start() {
@@ -71,6 +73,7 @@ public class Controller {
                 switch (command) {
                     case "1" -> tableView.displayAvailableData();
                     case "2" -> rebuildDatamartAndNotify();
+                    case "3" -> recommendator.generateRecommendations();
                     case "q", "Q", "exit", "quit" -> {
                         running = false;
                         stop();
@@ -90,6 +93,7 @@ public class Controller {
         System.out.println("\n=== Enerweather BusinessUnit ===");
         System.out.println("1. View Data");
         System.out.println("2. Rebuild Datamart");
+        System.out.println("3. Recommendations");
         System.out.println("q. Quit");
         System.out.print("\nSelect an option: ");
     }
@@ -153,6 +157,7 @@ public class Controller {
                 for (Path topicDir : topics) {
                     String topic = topicDir.getFileName().toString();
                     Path feederDir = topicDir.resolve(topic + "Feeder");
+                    if (!Files.exists(feederDir)) continue;
                     try (DirectoryStream<Path> days = Files.newDirectoryStream(feederDir, "*.events")) {
                         for (Path eventsFile : days) {
                             String timestamp = Files.lines(eventsFile).findFirst()
