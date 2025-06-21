@@ -27,6 +27,7 @@ public class Controller {
     private static final Path EVENTSTORE_ROOT = Paths.get("eventstore");
     private static final Path DATAMART_ROOT = Paths.get("datamart");
 
+    private boolean repeatedLine = false;
     private Connection connection;
     private Session session;
     private final TableView tableView = new TableView();
@@ -151,7 +152,8 @@ public class Controller {
             try (DirectoryStream<Path> topics = Files.newDirectoryStream(EVENTSTORE_ROOT)) {
                 for (Path topicDir : topics) {
                     String topic = topicDir.getFileName().toString();
-                    try (DirectoryStream<Path> days = Files.newDirectoryStream(topicDir, "*.events")) {
+                    Path feederDir = topicDir.resolve(topic + "Feeder");
+                    try (DirectoryStream<Path> days = Files.newDirectoryStream(feederDir, "*.events")) {
                         for (Path eventsFile : days) {
                             String timestamp = Files.lines(eventsFile).findFirst()
                                     .map(line -> gson.fromJson(line, JsonObject.class)
@@ -159,14 +161,13 @@ public class Controller {
                                     .orElseThrow();
                             String date = LocalDate.parse(timestamp.substring(0,10))
                                     .format(DateTimeFormatter.BASIC_ISO_DATE);
-                            Path csvFile = DATAMART_ROOT.resolve(topic).resolve(date + ".csv");
-                            if (Files.exists(csvFile)) {
-                                continue;
+                            Path csvFile = DATAMART_ROOT.resolve(topic).resolve(topic + "Feeder").resolve(date + ".csv");
+                            if (!Files.exists(csvFile)) {
+                                Files.lines(eventsFile).forEach(line -> {
+                                    JsonObject evt = gson.fromJson(line, JsonObject.class);
+                                    writer.handleEvent(topic, evt);
+                                });
                             }
-                            Files.lines(eventsFile).forEach(line -> {
-                                JsonObject evt = gson.fromJson(line, JsonObject.class);
-                                writer.handleEvent(topic, evt);
-                            });
                         }
                     }
                 }
