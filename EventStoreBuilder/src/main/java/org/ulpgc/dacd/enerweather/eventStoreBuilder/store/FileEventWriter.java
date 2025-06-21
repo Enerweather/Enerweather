@@ -21,7 +21,7 @@ public class FileEventWriter {
         String timestamp    = event.get("timestamp").getAsString();
         String date  = LocalDate.parse(timestamp.substring(0,10))
                 .format(DateTimeFormatter.BASIC_ISO_DATE);
-        Path dir = baseDir.resolve(topicName);
+        Path dir = baseDir.resolve(topicName).resolve(topicName + "Feeder");
         Path file = dir.resolve(date + ".events");
 
         try {

@@ -57,7 +57,7 @@ public class CsvEventWriter {
         String date  = LocalDate.parse(timestamp.substring(0,10))
                 .format(DateTimeFormatter.BASIC_ISO_DATE);
 
-        Path dir     = baseDir.resolve(topicName);
+        Path dir     = baseDir.resolve(topicName).resolve(topicName + "Feeder");
         Path csvFile = dir.resolve(date + ".csv");
         try {
             Files.createDirectories(dir);

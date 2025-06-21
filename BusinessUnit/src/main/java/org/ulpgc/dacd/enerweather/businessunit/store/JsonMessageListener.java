@@ -30,7 +30,7 @@ public class JsonMessageListener implements MessageListener {
             String date = LocalDate.parse(timestamp.substring(0,10))
                     .format(DateTimeFormatter.BASIC_ISO_DATE);
 
-            Path csvFile = Paths.get("datamart").resolve(topicName).resolve(date + ".csv");
+            Path csvFile = Paths.get("datamart").resolve(topicName).resolve(topicName + "Feeder").resolve(date + ".csv");
             if (!Files.exists(csvFile)) {
                 writer.handleEvent(topicName, event);
             }

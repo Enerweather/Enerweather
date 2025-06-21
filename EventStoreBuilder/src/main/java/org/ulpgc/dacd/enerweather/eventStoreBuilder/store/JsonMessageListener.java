@@ -28,8 +28,8 @@ public class JsonMessageListener implements MessageListener {
             String date = LocalDate.parse(timestamp.substring(0,10))
                     .format(DateTimeFormatter.BASIC_ISO_DATE);
 
-            Path csvFile = Paths.get("datamart").resolve(topicName).resolve(date + ".csv");
-            if (!Files.exists(csvFile)) {
+            Path file = Paths.get("eventstore").resolve(topicName).resolve(topicName + "Feeder").resolve(date + ".events");
+            if (!Files.exists(file)) {
                 writer.handleEvent(topicName, event);
             }
         } catch (JMSException e) {
