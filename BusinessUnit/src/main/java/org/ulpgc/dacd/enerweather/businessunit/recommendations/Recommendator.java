@@ -9,11 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Recommendator {
-    private static final double WIND_SPEED_THRESHOLD   = 6.0;
-    private static final double WIND_GEN_THRESHOLD     = 2000;
-    private static final double SOLAR_GEN_THRESHOLD    = 3500;
-    private static final String WIND_INDICATOR         = "Wind";
-    private static final String SOLAR_INDICATOR        = "Solar photovoltaic";
     private static final Path DATAMART_ROOT = Paths.get("datamart");
 
     private final Path weatherRoot = DATAMART_ROOT.resolve("weather").resolve("weatherFeeder");
@@ -23,31 +18,86 @@ public class Recommendator {
     }
 
     public void generateRecommendations() {
-        Map<String, List<Double>> windSpeeds   = collectWindSpeeds();
+        generateWindRecommendations();
+        generateSolarRecommendations();
+    }
+
+    public void generateSolarRecommendations() {
         Map<String, List<String>> skyClouds     = collectClouds();
-        Map<String, List<Double>> windEnergy   = collectEnergy(WIND_INDICATOR);
-        Map<String, List<Double>> solarEnergy  = collectEnergy(SOLAR_INDICATOR);
-        System.out.println("\n=== RECOMENDACIONES DE ENERGÍA ===");
+        Map<String, List<Double>> solarEnergy  = collectEnergy("Solar photovoltaic");
 
-        for (String city : windSpeeds.keySet()) {
-            double avgSpeed    = average(windSpeeds.get(city));
-            double avgWindGen  = average(windEnergy.getOrDefault(city, List.of()));
-            if (avgWindGen == 0) continue;
-            if (avgSpeed > WIND_SPEED_THRESHOLD && avgWindGen < WIND_GEN_THRESHOLD) {
-                System.out.printf("🌪️ %s: velocidad media %.2f m/s y solo %.2f MWh ➜ Instalar MÁS aerogeneradores%n",
-                        city, avgSpeed, avgWindGen);
-            }
+        Map<String, Integer> cloudPriority = new HashMap<>();
+        cloudPriority.put("clear sky", 5);
+        cloudPriority.put("few clouds", 4);
+        cloudPriority.put("scattered clouds", 3);
+        cloudPriority.put("broken clouds", 2);
+        cloudPriority.put("overcast clouds", 1);
+
+        Map<String, Double> skyScorePerCity = new HashMap<>();
+
+        for (Map.Entry<String, List<String>> entry : skyClouds.entrySet()) {
+            String city = entry.getKey();
+            List<String> clouds = entry.getValue();
+
+            double avgScore = clouds.stream()
+                    .mapToInt(desc -> cloudPriority.getOrDefault(desc, 0))
+                    .average().orElse(0);
+
+            skyScorePerCity.put(city, avgScore);
         }
 
-        for (String city : skyClouds.keySet()) {
-            String commonSky   = mostFrequent(skyClouds.get(city)).toLowerCase();
-            double avgSolarGen = average(solarEnergy.getOrDefault(city, List.of()));
-            if (avgSolarGen == 0) continue;
-            if (!commonSky.contains("cloud") && avgSolarGen < SOLAR_GEN_THRESHOLD) {
-                System.out.printf("☀️ %s: cielo habitual “%s” y solo %.2f MWh ➜ Instalar MÁS paneles solares%n",
-                        city, commonSky, avgSolarGen);
-            }
-        }
+        System.out.println("🔆 Top 3 cities with the most solar energy to exploit:");
+
+        skyScorePerCity.entrySet().stream()
+                .filter(e -> solarEnergy.containsKey(e.getKey()))
+                .map(e -> Map.entry(
+                        e.getKey(),
+                        e.getValue() - average(solarEnergy.get(e.getKey())) / 10000.0
+                ))
+                .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+                .limit(3)
+                .forEach(e -> {
+                    String city = e.getKey();
+
+                    double avgEnergy = average(solarEnergy.get(city));
+
+                    String mostCommonSky = skyClouds.get(city).stream()
+                            .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
+                            .entrySet().stream()
+                            .max(Map.Entry.comparingByValue())
+                            .map(Map.Entry::getKey)
+                            .orElse("Unknown");
+
+                    System.out.printf("- %s: %.2f kWh, Most common sky: %s %n", city, avgEnergy, mostCommonSky);
+                });
+    }
+
+    public void generateWindRecommendations() {
+        Map<String, List<Double>> windSpeeds   = collectWindSpeeds();
+        Map<String, List<Double>> windEnergy   = collectEnergy("Wind");
+
+        Map<String, Double> avgWindSpeed = windSpeeds.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> average(e.getValue()) / 2
+                ));
+
+        System.out.println("🌬️ Top 3 cities with the most aeolic energy to exploit:");
+
+        avgWindSpeed.entrySet().stream()
+                .filter(e -> windEnergy.containsKey(e.getKey()))
+                .map(e -> Map.entry(
+                        e.getKey(),
+                        e.getValue() - average(windEnergy.get(e.getKey())) / 10000
+                ))
+                .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+                .limit(3)
+                .forEach(e -> System.out.printf("- %s: %.2f kWh, Avg Wind Speed: %.2f %n",
+                        e.getKey(),
+                        average(windEnergy.get(e.getKey())),
+                        avgWindSpeed.get(e.getKey())));
+
+        System.out.println();
     }
 
     private Map<String, List<Double>> collectWindSpeeds() {
@@ -128,16 +178,5 @@ public class Recommendator {
         return list == null || list.isEmpty()
                 ? 0.0
                 : list.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-    }
-
-    private String mostFrequent(List<String> list) {
-        return list == null || list.isEmpty()
-                ? ""
-                : list.stream()
-                .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
-                .entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse("");
     }
 }
