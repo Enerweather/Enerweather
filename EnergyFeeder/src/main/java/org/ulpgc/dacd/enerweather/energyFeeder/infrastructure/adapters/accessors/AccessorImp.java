@@ -35,7 +35,7 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.energyFeeder.infr
     public List<Energy> fetchEnergyData() throws FetchException {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-            LocalDate queryDate = LocalDate.now().minusDays(4);
+            LocalDate queryDate = LocalDate.now().minusDays(2);
             String start = queryDate.atStartOfDay().format(formatter);
             String end = queryDate.atTime(23, 59, 59).format(formatter);
 
@@ -93,7 +93,7 @@ public class AccessorImp implements org.ulpgc.dacd.enerweather.energyFeeder.infr
         for (JsonElement ce : content) {
             JsonObject item = ce.getAsJsonObject();
             String type = item.get("type").getAsString();
-            // 3) Only accept Wind or Solar photovoltaic
+
             if (!(type.equals("Wind") || type.equals("Solar photovoltaic"))) continue;
 
             JsonObject attrs = item.getAsJsonObject("attributes");

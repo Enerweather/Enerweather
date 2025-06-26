@@ -3,7 +3,7 @@ package org.ulpgc.dacd.enerweather.businessunit;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.ulpgc.dacd.enerweather.businessunit.recommendations.Recommendator;
+import org.ulpgc.dacd.enerweather.businessunit.recommendations.Recommender;
 import org.ulpgc.dacd.enerweather.businessunit.store.CsvEventWriter;
 import org.ulpgc.dacd.enerweather.businessunit.store.JsonMessageListener;
 import org.ulpgc.dacd.enerweather.businessunit.view.TableView;
@@ -16,10 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.Scanner;
-import java.util.stream.Stream;
-
 
 
 public class Controller {
@@ -32,7 +29,7 @@ public class Controller {
     private Connection connection;
     private Session session;
     private final TableView tableView = new TableView();
-    private final Recommendator recommendator = new Recommendator();
+    private final Recommender recommender = new Recommender();
 
 
     public void start() {
@@ -71,7 +68,7 @@ public class Controller {
 
                 switch (command) {
                     case "1" -> tableView.displayAvailableData();
-                    case "2" -> recommendator.generateRecommendations();
+                    case "2" -> recommender.generateRecommendations();
                     case "q", "Q", "exit", "quit" -> {
                         running = false;
                         stop();

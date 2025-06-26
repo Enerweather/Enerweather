@@ -1,0 +1,29 @@
+timestamp,cityName,description,windSpeed
+2025-06-24T20:22,Madrid,light rain,8.23
+2025-06-24T20:22,Barcelona,clear sky,2.57
+2025-06-24T20:22,Valencia,few clouds,2.6
+2025-06-24T20:22,Seville,clear sky,6.69
+2025-06-24T20:22,Zaragoza,clear sky,8.23
+2025-06-24T20:22,Málaga,clear sky,3.6
+2025-06-24T20:22,Murcia,broken clouds,4.89
+2025-06-24T20:22,Palma de Mallorca,clear sky,1.03
+2025-06-24T20:22,Las Palmas de Gran Canaria,few clouds,10.8
+2025-06-24T20:22,Bilbao,thunderstorm with light rain,6.69
+2025-06-24T20:22,Alicante,clear sky,4.12
+2025-06-24T20:22,Córdoba,clear sky,4.92
+2025-06-24T20:22,Valladolid,light rain,6.23
+2025-06-24T20:22,Vigo,broken clouds,2.06
+2025-06-24T20:22,Gijón,moderate rain,0.45
+2025-06-24T20:22,Vitoria-Gasteiz,thunderstorm with heavy rain,9.77
+2025-06-24T20:22,A Coruña,mist,3.13
+2025-06-24T20:22,Granada,clear sky,3.78
+2025-06-24T20:22,Elche,clear sky,4.12
+2025-06-24T20:22,Oviedo,moderate rain,2.71
+2025-06-24T20:22,Badalona,clear sky,1.79
+2025-06-24T20:22,Cartagena,few clouds,5.14
+2025-06-24T20:22,Terrassa,clear sky,1.54
+2025-06-24T20:22,Jerez de la Frontera,few clouds,5.66
+2025-06-24T20:22,Sabadell,clear sky,1.79
+2025-06-24T20:22,Móstoles,broken clouds,8.23
+2025-06-24T20:22,Santa Cruz de Tenerife,scattered clouds,7.72
+2025-06-24T20:22,Alcalá de Henares,clear sky,6.69

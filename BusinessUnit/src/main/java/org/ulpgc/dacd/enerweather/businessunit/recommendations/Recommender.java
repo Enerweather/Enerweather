@@ -8,13 +8,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Recommendator {
+public class Recommender {
     private static final Path DATAMART_ROOT = Paths.get("datamart");
 
     private final Path weatherRoot = DATAMART_ROOT.resolve("weather").resolve("weatherFeeder");
     private final Path energyRoot = DATAMART_ROOT.resolve("energy").resolve("energyFeeder");
 
-    public Recommendator() {
+    public Recommender() {
     }
 
     public void generateRecommendations() {
