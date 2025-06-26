@@ -3,8 +3,6 @@ package org.ulpgc.dacd.enerweather.businessunit.store;
 import com.google.gson.JsonObject;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -12,23 +12,10 @@ To analyze the relationship between weather (cloudiness and wind speed) and rene
 
 ## System Architecture
 
-The architecture follows clean modular principles and is inspired by the Lambda pattern. It consists of:
-
-- **WeatherFeeder** – Fetches weather data from OpenWeatherMap and publishes to `weather` topic.
-- **EnergyFeeder** – Retrieves renewable energy data from REE and publishes to `energy` topic.
-- **EventStoreBuilder** – Subscribes to both topics and stores `.events` files by date.
-- **BusinessUnit** – Consumes real-time messages.
-Rebuilds a historical datamart.
-Displays data and recommendations through a CLI.
-
-![Final Architecture Diagram](images/Arquitectura.jpg)
-
----
-
-## Modules
+The architecture follows clean modular principles and is inspired by the Lambda pattern.
+It consists of the following modules:
 
 ### WeatherFeeder
-
 - Fetches current weather for 29 Spanish cities via OpenWeatherMap API.
 - Extracts `windSpeed`, `description`, `cityName`.
 - Publishes to `weather` topic on ActiveMQ.
@@ -57,25 +44,23 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
   - Generate recommendations for top cities in solar or wind energy.
   - Quit application.
 
+![Final Architecture Diagram](images/Arquitectura.jpg)
+
 ---
 
 ## Class Diagrams
 
-
-### EventStoreBuilder
-![Event Store Builder Diagram](images/Event_Builder.png)
-
-
 ### WeatherFeeder
 ![Weather Feeder Diagram](images/Weather_Feeder.png)
-
 
 ### EnergyFeeder
 ![Energy Feeder Diagram](images/Energy_Feeder.png)
 
+### EventStoreBuilder
+![Event Store Builder Diagram](images/Event_Builder.png)
 
 ### BusinessUnit
-![Business Unit Diagram](images/Business_Unit.png)
+<img src="images/Business_Unit.png" alt="BusinessUnit" width="700"/>
 ---
 
 ## Technologies Used
@@ -83,9 +68,7 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 * Java 21
 * Apache ActiveMQ
 * Maven
-* SQLite JDBC
 * Gson (JSON)
-* CSVWriter
 
 ---
 
@@ -98,21 +81,30 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 * Maven
 
 ### Setup
-
+1. Clone the project:
 ```bash
 git clone https://github.com/enerweather/enerweather.git
 ```
-
-### Run ActiveMQ
+2. Build the project:
 ```bash
-# From ActiveMQ installation
+cd Enerweather
+mvn clean install 
+```
+### Install and Run Activemq
+1. Download Apache ActiveMQ from https://activemq.apache.org/
+2. Extract it and run this from the ActiveMQ installation directory:
+```bash
 ./bin/activemq start
 ```
-
-Visit http://localhost:8161/ (login: admin / admin).
+3. Verify it's running by accessing the web console at http://localhost:8161/admin/ (login: admin / admin).
 
 ### Run modules
-Run each individual module, first EventStoreBuilder, then both feeders, and finally the BusinessUnit
+Run each individual module, first EventStoreBuilder, then both feeders, and finally the BusinessUnit.
+
+For WeatherFeeder, the API key of OpenWeatherMap is needed, and the free one that is given upon registration is enough.
+<img src="images/weatherConfiguration.png" alt="weatherConfiguration" width="500"/>
+
+So to run the WeatherFeeder module, create a run configuration with the previous parameters in the icon next to the run button, and putting the OpenWeatherMap API in the Program arguments section.
 
 ### Interact with the console
 Once inside the BusinessUnit module, use the interactive CLI:
@@ -124,7 +116,6 @@ Once inside the BusinessUnit module, use the interactive CLI:
   - View top 3 cities by solar or wind energy levels.
 3. Quit
   - Exit the application.
-
 
 
 ---

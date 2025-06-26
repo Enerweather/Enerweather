@@ -22,7 +22,7 @@ public class Recommender {
         generateSolarRecommendations();
     }
 
-    public void generateSolarRecommendations() {
+    private void generateSolarRecommendations() {
         Map<String, List<String>> skyClouds     = collectClouds();
         Map<String, List<Double>> solarEnergy  = collectEnergy("Solar photovoltaic");
 
@@ -72,7 +72,7 @@ public class Recommender {
                 });
     }
 
-    public void generateWindRecommendations() {
+    private void generateWindRecommendations() {
         Map<String, List<Double>> windSpeeds   = collectWindSpeeds();
         Map<String, List<Double>> windEnergy   = collectEnergy("Wind");
 
