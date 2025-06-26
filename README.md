@@ -1,6 +1,6 @@
 # 🌤️ Enerweather
 
-Enerweather is a Java-based application that collects, processes, and stores both renewable energy and weather data for analysis of energy production patterns in relation to weather conditions in Spain.
+Enerweather is a Java-based application that analyzes the relationship between weather conditions and renewable energy production across major Spanish cities. It integrates real-time and historical data and presents actionable insights through an interactive CLI.
 
 ---
 
@@ -17,7 +17,9 @@ The architecture follows clean modular principles and is inspired by the Lambda 
 - **WeatherFeeder** – Fetches weather data from OpenWeatherMap and publishes to `weather` topic.
 - **EnergyFeeder** – Retrieves renewable energy data from REE and publishes to `energy` topic.
 - **EventStoreBuilder** – Subscribes to both topics and stores `.events` files by date.
-- **BusinessUnit** – Consumes historical and real-time events to generate insights and store them in a datamart.
+- **BusinessUnit** – Consumes real-time messages.
+Rebuilds a historical datamart.
+Displays data and recommendations through a CLI.
 
 ![Final Architecture Diagram](images/Arquitectura.jpg)
 
@@ -27,7 +29,7 @@ The architecture follows clean modular principles and is inspired by the Lambda 
 
 ### WeatherFeeder
 
-- Fetches current weather for 29 Spanish cities.
+- Fetches current weather for 29 Spanish cities via OpenWeatherMap API.
 - Extracts `windSpeed`, `description`, `cityName`.
 - Publishes to `weather` topic on ActiveMQ.
 
@@ -48,7 +50,12 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 ### BusinessUnit
 
 - Subscribes to real-time and reads from `eventstore/`.
-- Builds a datamart as CSV files.
+- Builds a CSV-based datamart organized by date and type.
+- Includes a CLI with options to:
+  - View stored data by date/type.
+  - Rebuild the entire datamart from events.
+  - Generate recommendations for top cities in solar or wind energy.
+  - Quit application.
 
 ---
 
@@ -87,7 +94,7 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 ### Prerequisites
 
 * Java 21
-* Apache ActiveMQ (localhost:61616)
+* Apache ActiveMQ (tcp://localhost:61616)
 * Maven
 
 ### Setup
@@ -102,30 +109,32 @@ git clone https://github.com/enerweather/enerweather.git
 ./bin/activemq start
 ```
 
+Visit http://localhost:8161/ (login: admin / admin).
+
 ### Run modules
 Run each individual module, first EventStoreBuilder, then both feeders, and finally the BusinessUnit
 
 ### Interact with the console
-Use the menu options to interact with the data:
-- View Data: Browse and view data stored in the datamart
-- Rebuild Datamart: Rebuild the datamart from the eventstore
-- Quit: Exit the application
+Once inside the BusinessUnit module, use the interactive CLI:
+1. View Data
+  - Choose between weather or energy.
+  - Select a date.
+  - Filter and browse the corresponding dataset.
+2. Recommendations
+  - View top 3 cities by solar or wind energy levels.
+3. Quit
+  - Exit the application.
 
 
-When viewing data:
-
-- First select a data type (weather or energy)
-- Then select a date to view data from
-- Apply filters if needed
 
 ---
 
 ## Design Principles
 
-* Modular architecture
-* Event-driven with decoupling via ActiveMQ
-* Clean separation of concerns
-* Replay of historical data (via event store)
+* Modular architecture – Each module is independent and focused on a single responsibility.
+* Event-driven – Modules communicate via ActiveMQ topics.
+* Hexagonal architecture – Use of ports and adapters.
+* Historical replay – Events can be replayed from .events files to rebuild the datamart.
 
 ---
 
