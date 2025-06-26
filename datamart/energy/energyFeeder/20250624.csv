@@ -1,0 +1,57 @@
+timestamp,city,indicator,value
+2025-06-24T00:00,La Coruña,Wind,2498.34
+2025-06-24T00:00,Alicante,Wind,3618.38
+2025-06-24T00:00,Vigo,Wind,2993.64
+2025-06-24T00:00,Gijón,Wind,2741.64
+2025-06-24T00:00,Las Palmas de Gran Canaria,Wind,3869.70
+2025-06-24T00:00,Palma,Wind,4421.81
+2025-06-24T00:00,Granada,Wind,2357.52
+2025-06-24T00:00,Badalona,Wind,2251.76
+2025-06-24T00:00,Córdoba,Wind,3289.75
+2025-06-24T00:00,Valladolid,Wind,3019.60
+2025-06-24T00:00,Zaragoza,Wind,6972.61
+2025-06-24T00:00,Seville,Wind,6929.26
+2025-06-24T00:00,Móstoles,Wind,2122.03
+2025-06-24T00:00,Barcelona,Wind,17013.94
+2025-06-24T00:00,Bilbao,Wind,3531.52
+2025-06-24T00:00,Madrid,Wind,34532.39
+2025-06-24T00:00,Alcalá de Henares,Wind,1993.41
+2025-06-24T00:00,Málaga,Wind,5976.81
+2025-06-24T00:00,Jerez de la Frontera,Wind,2150.24
+2025-06-24T00:00,Sabadell,Wind,2184.70
+2025-06-24T00:00,Valencia,Wind,8317.64
+2025-06-24T00:00,Murcia,Wind,4762.33
+2025-06-24T00:00,Vitoria-Gasteiz,Wind,2562.84
+2025-06-24T00:00,Terrassa,Wind,2256.41
+2025-06-24T00:00,Santa Cruz de Tenerife,Wind,2110.78
+2025-06-24T00:00,Oviedo,Wind,2218.91
+2025-06-24T00:00,Elche,Wind,2368.79
+2025-06-24T00:00,Cartagena,Wind,2180.54
+2025-06-24T00:00,La Coruña,Solar photovoltaic,3146.71
+2025-06-24T00:00,Alicante,Solar photovoltaic,4557.43
+2025-06-24T00:00,Vigo,Solar photovoltaic,3770.56
+2025-06-24T00:00,Gijón,Solar photovoltaic,3453.16
+2025-06-24T00:00,Las Palmas de Gran Canaria,Solar photovoltaic,4873.97
+2025-06-24T00:00,Palma,Solar photovoltaic,5569.37
+2025-06-24T00:00,Granada,Solar photovoltaic,2969.35
+2025-06-24T00:00,Badalona,Solar photovoltaic,2836.14
+2025-06-24T00:00,Córdoba,Solar photovoltaic,4143.52
+2025-06-24T00:00,Valladolid,Solar photovoltaic,3803.26
+2025-06-24T00:00,Zaragoza,Solar photovoltaic,8782.15
+2025-06-24T00:00,Seville,Solar photovoltaic,8727.56
+2025-06-24T00:00,Móstoles,Solar photovoltaic,2672.75
+2025-06-24T00:00,Barcelona,Solar photovoltaic,21429.44
+2025-06-24T00:00,Bilbao,Solar photovoltaic,4448.03
+2025-06-24T00:00,Madrid,Solar photovoltaic,43494.32
+2025-06-24T00:00,Alcalá de Henares,Solar photovoltaic,2510.75
+2025-06-24T00:00,Málaga,Solar photovoltaic,7527.92
+2025-06-24T00:00,Jerez de la Frontera,Solar photovoltaic,2708.28
+2025-06-24T00:00,Sabadell,Solar photovoltaic,2751.68
+2025-06-24T00:00,Valencia,Solar photovoltaic,10476.26
+2025-06-24T00:00,Murcia,Solar photovoltaic,5998.26
+2025-06-24T00:00,Vitoria-Gasteiz,Solar photovoltaic,3227.95
+2025-06-24T00:00,Terrassa,Solar photovoltaic,2842.00
+2025-06-24T00:00,Santa Cruz de Tenerife,Solar photovoltaic,2658.58
+2025-06-24T00:00,Oviedo,Solar photovoltaic,2794.76
+2025-06-24T00:00,Elche,Solar photovoltaic,2983.55
+2025-06-24T00:00,Cartagena,Solar photovoltaic,2746.44
