@@ -109,6 +109,14 @@ For WeatherFeeder, the API key of OpenWeatherMap is needed, and the free one tha
 
 So to run the WeatherFeeder module, create a run configuration with the previous parameters in the icon next to the run button, and putting the OpenWeatherMap API in the Program arguments section.
 
+<img src="images/WeatherError.png" alt="WeatherError" width="700"/>
+
+If the WeatherFeeder module execution produces the previous error, run the following command in the project folder:
+
+```bash
+mvn clean compile
+```
+
 ### Interact with the console
 Once inside the BusinessUnit module, use the interactive CLI:
 1. View Data
