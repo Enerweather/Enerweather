@@ -3,6 +3,7 @@ package org.ulpgc.dacd.enerweather.businessunit;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.ulpgc.dacd.enerweather.businessunit.recommendations.Recommender;
 import org.ulpgc.dacd.enerweather.businessunit.store.CsvEventWriter;
 import org.ulpgc.dacd.enerweather.businessunit.store.JsonMessageListener;
 import org.ulpgc.dacd.enerweather.businessunit.view.TableView;
@@ -13,9 +14,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.util.stream.Stream;
+
 
 public class Controller {
     private static final String BROKER_URL = "tcp://localhost:61616";
@@ -23,13 +25,16 @@ public class Controller {
     private static final Path EVENTSTORE_ROOT = Paths.get("eventstore");
     private static final Path DATAMART_ROOT = Paths.get("datamart");
 
+
     private Connection connection;
     private Session session;
     private final TableView tableView = new TableView();
+    private final Recommender recommender = new Recommender();
+
 
     public void start() {
         try {
-            rebuildDatamart();
+            updateDatamart();
             connectToBroker();
             System.out.println("BusinessUnit connected and listening on topics.");
             startCommandLoop();
@@ -63,7 +68,7 @@ public class Controller {
 
                 switch (command) {
                     case "1" -> tableView.displayAvailableData();
-                    case "2" -> rebuildDatamartAndNotify();
+                    case "2" -> recommender.generateRecommendations();
                     case "q", "Q", "exit", "quit" -> {
                         running = false;
                         stop();
@@ -82,37 +87,16 @@ public class Controller {
     private void displayMenu() {
         System.out.println("\n=== Enerweather BusinessUnit ===");
         System.out.println("1. View Data");
-        System.out.println("2. Rebuild Datamart");
+        System.out.println("2. Recommendations");
         System.out.println("q. Quit");
         System.out.print("\nSelect an option: ");
     }
 
-    private void rebuildDatamartAndNotify() {
-        try {
-            System.out.println("Rebuilding datamart...");
-            rebuildDatamart();
-            System.out.println("Datamart rebuilt successfully.");
-        } catch (IOException e) {
-            System.err.println("Failed to rebuild datamart: " + e.getMessage());
-        }
-    }
-
-    private void rebuildDatamart() throws IOException {
-        CsvEventWriter replayWriter = new CsvEventWriter();
+    private void updateDatamart() throws IOException {
+        CsvEventWriter writer = new CsvEventWriter();
         Gson gson = new Gson();
 
-        if(Files.exists(DATAMART_ROOT)) {
-            try (Stream<Path> walk = Files.walk(DATAMART_ROOT)) {
-                walk.sorted(Comparator.reverseOrder())
-                        .forEach(p -> {
-                            try {
-                                Files.delete(p);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-            }
-        } else {
+        if(!Files.exists(DATAMART_ROOT)) {
             Files.createDirectories(DATAMART_ROOT);
         }
 
@@ -120,12 +104,23 @@ public class Controller {
             try (DirectoryStream<Path> topics = Files.newDirectoryStream(EVENTSTORE_ROOT)) {
                 for (Path topicDir : topics) {
                     String topic = topicDir.getFileName().toString();
-                    try (DirectoryStream<Path> days = Files.newDirectoryStream(topicDir, "*.events")) {
+                    Path feederDir = topicDir.resolve(topic + "Feeder");
+                    if (!Files.exists(feederDir)) continue;
+                    try (DirectoryStream<Path> days = Files.newDirectoryStream(feederDir, "*.events")) {
                         for (Path eventsFile : days) {
-                            Files.lines(eventsFile).forEach(line -> {
-                                JsonObject evt = gson.fromJson(line, JsonObject.class);
-                                replayWriter.handleEvent(topic, evt);
-                            });
+                            String timestamp = Files.lines(eventsFile).findFirst()
+                                    .map(line -> gson.fromJson(line, JsonObject.class)
+                                            .get("timestamp").getAsString())
+                                    .orElseThrow();
+                            String date = LocalDate.parse(timestamp.substring(0,10))
+                                    .format(DateTimeFormatter.BASIC_ISO_DATE);
+                            Path csvFile = DATAMART_ROOT.resolve(topic).resolve(topic + "Feeder").resolve(date + ".csv");
+                            if (!Files.exists(csvFile)) {
+                                Files.lines(eventsFile).forEach(line -> {
+                                    JsonObject evt = gson.fromJson(line, JsonObject.class);
+                                    writer.handleEvent(topic, evt);
+                                });
+                            }
                         }
                     }
                 }
