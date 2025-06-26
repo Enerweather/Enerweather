@@ -29,7 +29,6 @@ public class Controller {
     private static final Path DATAMART_ROOT = Paths.get("datamart");
 
 
-    private boolean repeatedLine = false;
     private Connection connection;
     private Session session;
     private final TableView tableView = new TableView();
@@ -72,8 +71,7 @@ public class Controller {
 
                 switch (command) {
                     case "1" -> tableView.displayAvailableData();
-                    case "2" -> rebuildDatamartAndNotify();
-                    case "3" -> recommendator.generateRecommendations();
+                    case "2" -> recommendator.generateRecommendations();
                     case "q", "Q", "exit", "quit" -> {
                         running = false;
                         stop();
@@ -92,56 +90,9 @@ public class Controller {
     private void displayMenu() {
         System.out.println("\n=== Enerweather BusinessUnit ===");
         System.out.println("1. View Data");
-        System.out.println("2. Rebuild Datamart");
-        System.out.println("3. Recommendations");
+        System.out.println("2. Recommendations");
         System.out.println("q. Quit");
         System.out.print("\nSelect an option: ");
-    }
-
-    private void rebuildDatamartAndNotify() {
-        try {
-            System.out.println("Rebuilding datamart...");
-            rebuildDatamart();
-            System.out.println("Datamart rebuilt successfully.");
-        } catch (IOException e) {
-            System.err.println("Failed to rebuild datamart: " + e.getMessage());
-        }
-    }
-
-    private void rebuildDatamart() throws IOException {
-        CsvEventWriter replayWriter = new CsvEventWriter();
-        Gson gson = new Gson();
-
-        if(Files.exists(DATAMART_ROOT)) {
-            try (Stream<Path> walk = Files.walk(DATAMART_ROOT)) {
-                walk.sorted(Comparator.reverseOrder())
-                        .forEach(p -> {
-                            try {
-                                Files.delete(p);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-            }
-        } else {
-            Files.createDirectories(DATAMART_ROOT);
-        }
-
-        if (Files.exists(EVENTSTORE_ROOT)) {
-            try (DirectoryStream<Path> topics = Files.newDirectoryStream(EVENTSTORE_ROOT)) {
-                for (Path topicDir : topics) {
-                    String topic = topicDir.getFileName().toString();
-                    try (DirectoryStream<Path> days = Files.newDirectoryStream(topicDir, "*.events")) {
-                        for (Path eventsFile : days) {
-                            Files.lines(eventsFile).forEach(line -> {
-                                JsonObject evt = gson.fromJson(line, JsonObject.class);
-                                replayWriter.handleEvent(topic, evt);
-                            });
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void updateDatamart() throws IOException {
@@ -179,7 +130,6 @@ public class Controller {
             }
         }
     }
-
 
     private void connectToBroker() throws JMSException {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(BROKER_URL);

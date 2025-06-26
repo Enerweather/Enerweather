@@ -3,7 +3,6 @@ package org.ulpgc.dacd.enerweather.businessunit.view;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.ulpgc.dacd.enerweather.businessunit.util.DateUtils;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -52,7 +51,7 @@ public class TableView {
     }
 
     private void displayAvailableDates(String topic) throws IOException {
-        Path topicDir = DATAMART_ROOT.resolve(topic);
+        Path topicDir = DATAMART_ROOT.resolve(topic).resolve(topic + "Feeder");
 
         System.out.println("\n=== Available Dates for " + topic + " ===");
         try (DirectoryStream<Path> dateFiles = Files.newDirectoryStream(topicDir, "*.csv")) {
@@ -71,7 +70,7 @@ public class TableView {
             for (int i = 0; i < files.size(); i++) {
                 String fileName = files.get(i).getFileName().toString();
 
-                String date = DateUtils.formatBasicDate(fileName.substring(0, 8));
+                String date = formatBasicDate(fileName.substring(0, 8));
                 System.out.println((i + 1) + ". " + date);
             }
 
@@ -216,10 +215,20 @@ public class TableView {
         }
 
         for (String header : headers) {
-            widths.put(header, widths.get(header)*2 + 2);
+            widths.put(header, widths.get(header) + 15);
         }
 
         return widths;
+    }
+
+    public static String formatBasicDate(String basicDate) {
+        if (basicDate == null || basicDate.length() != 8) {
+            return basicDate;
+        }
+
+        return basicDate.substring(0, 4) + "-" +
+                basicDate.substring(4, 6) + "-" +
+                basicDate.substring(6, 8);
     }
 
     private String buildFormatString(Map<String, Integer> columnWidths) {
