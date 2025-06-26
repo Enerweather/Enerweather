@@ -63,19 +63,19 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 
 
 ### EventStoreBuilder
-![Event Store Builder Diagram](images/EventStoreBuilder.jpg)
+![Event Store Builder Diagram](images/Event_Builder.png)
 
 
 ### WeatherFeeder
-![Weather Feeder Diagram](images/WeatherFeeder.png)
+![Weather Feeder Diagram](images/Weather_Feeder.png)
 
 
 ### EnergyFeeder
-![Energy Feeder Diagram](images/EnergyFeeder.png)
+![Energy Feeder Diagram](images/Energy_Feeder.png)
 
 
 ### BusinessUnit
-![Business Unit Diagram](images/BusinessUnit.jpg)
+![Business Unit Diagram](images/Business_Unit.png)
 ---
 
 ## Technologies Used
