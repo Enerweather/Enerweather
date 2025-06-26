@@ -103,6 +103,8 @@ mvn clean install
 Run each individual module, first EventStoreBuilder, then both feeders, and finally the BusinessUnit.
 
 For WeatherFeeder, the API key of OpenWeatherMap is needed, and the free one that is given upon registration is enough.
+
+
 <img src="images/weatherConfiguration.png" alt="weatherConfiguration" width="500"/>
 
 So to run the WeatherFeeder module, create a run configuration with the previous parameters in the icon next to the run button, and putting the OpenWeatherMap API in the Program arguments section.
