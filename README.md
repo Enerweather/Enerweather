@@ -61,6 +61,7 @@ eventstore/{topic}/{source}/{YYYYMMDD}.events
 
 ### BusinessUnit
 <img src="images/Business_Unit.png" alt="BusinessUnit" width="700"/>
+
 ---
 
 ## Technologies Used
